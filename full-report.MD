@@ -723,19 +723,21 @@ Results are presented in two main stages. The first stage presents results which
 
 In order to show that MetaGA4TSP is evolving better parameter sets for TSP GA than are initially obtained by random selection, the following graphs have been compiled using output from tests 1-5 and inputting generational information for average and best fitnesses found into a spreadsheet program (Micrsosoft Excel). Fitness is measured in terms of percentage as described in Chapter 3.2.2.1. The fitness scale (y-axis) is sometimes 0-100%, sometimes 0-120% and sometimes shorter ranges for example 84-102 %. Since the first 5 tests all run for either 12 or 20 generations, the x-axis ranges accordingly from 1-12 or 1-20. The data from which these graphics were compiled are shown in tabular format in Appendix A.
 
-| ![3da9482860fca3156112bdf9ae726230.png](/9a40dd25e39d4555a77dd6dc277a3366) | ![596a3864800e469a56b4e3324af8baab.png](:/011739901377420c9775f6a22dffcf2e) |
+| ![3da9482860fca3156112bdf9ae726230.png](/9a40dd25e39d4555a77dd6dc277a3366) | ![596a3864800e469a56b4e3324af8baab.png](/011739901377420c9775f6a22dffcf2e) |
 | --- | --- |
 | (a) | (b) |
 
 **Figure 20:** (a) Average and (b) best fitnesses for each generation of each of five iterations of test 1.
 
-| ![73040226ef61def6683bcc619160cae5.png](/825f26d43ac442479e999d87dd600c8b) | ![e72d94ec98ae446779682882978626aa.png](:/97fc2cd4dd4e474eb055ce8c5ea938f3) |
+| ![73040226ef61def6683bcc619160cae5.png](/825f26d43ac442479e999d87dd600c8b) | ![e72d94ec98ae446779682882978626aa.png](/97fc2cd4dd4e474eb055ce8c5ea938f3) |
 | --- | --- |
 | (a) | (b) |
 
 **Figure 21:** (a) Average and (b) best fitnesses for each generation of each of five iterations of test 2.
 
-| ![e25755abd4ffc572fe662a93122501c4.png](/5a6628a6005c463eba8a159e28fcd362) | ![37780cdab13c2fbd2ff613c0613074e8.png](:/b0ad9630d67f4a3a90d29781f4bb311f) |
+| ![e25755abd4ffc572fe662a93122501c4.png](/5a6628a6005c463eba8a159e28fcd362) | ![37780cdab13c2fbd2ff613c0613074e8.png](
+
+/b0ad9630d67f4a3a90d29781f4bb311f) |
 | --- | --- |
 | (a) | (b) |
 
