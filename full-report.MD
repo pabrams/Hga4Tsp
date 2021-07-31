@@ -347,6 +347,7 @@ Crossover is also known as recombination, or mating. It is a simulation of the s
 
 Crossover is applied after, or sometimes during, selection, and with a certain probability defined as the crossover rate.
 Mutation is intended to simulate random genetic mutation in nature, but tends to be used more frequently in GAs than in nature in order to encourage population diversity and prevent premature convergence. If one thinks of crossover as a binary genetic operator (acting on two parents), mutation can be thought of as a unary genetic operator. As with crossover, a mutation rate is defined to control how often mutation is applied. In some GAs, probability of mutation is implemented on a per-gene basis. A mutation rate of 0.01 (1%) would mean each gene has a one percent chance of being mutated. In all GAs implemented as part of this work, however, probability of mutation applies to each chromosome. A 0.01 mutation rate would mean each chromosome has a 1% chance of being mutated. A chromosome selected for mutation would then have one of its genes selected at random and given a new random state.
+
 ![4e78ab5abb87f7f18740dfa4c0df8aa9.png](/6c695eab1f744ca2aab893cfb7b8736a)
 
 **Figure 4:** Classic mutation at locus 1 on an arbitrary 8-bit chromosome.
