@@ -283,7 +283,7 @@ The path representation simply lists the cities in the order they are visited, s
 
 This means that if the starting city is not fixed at a certain spot, there will be a large number of path representations generated whose tours are duplicates of other tours. For example, in a TSP of n=5, the permutations 12345, 23451, 34512, 45123 and 51234 all represent the same tour. It also represents twice more tours than required by traversing the path in a different direction, eg the tours 12345 and 15432 give the same distance and graphical representation and start at the same city, but have different path representations. Despite these problems, it was decided the path representation would be used in every TSP GA involved in the meta-GA. Making the representation used adaptable was briefly considered, but it was rejected in light of probable implementation difficulties as well as the fact that most of the other operators are designed for one particular representation.
 
-![418e5c2e5fc49766e8fa495f7e5bcb1d.png](/b4c7759973a74c4fa09be15604c05bc1.png)
+![418e5c2e5fc49766e8fa495f7e5bcb1d.png](/b4c7759973a74c4fa09be15604c05bc1)
 
 **Figure 1**: All twelve unique tours on a TSP of size n=5 in graphical and path representations.
 
@@ -337,14 +337,14 @@ One wants to reward fit individuals when selecting the surviving members of the 
 
 Crossover is also known as recombination, or mating. It is a simulation of the sexual reproductive process which provides genetic inheritance. A great number of different crossover operators have been developed for various purposes. One of the first and simplest is the simple single-point crossover, where a crossover point is chosen at random, and the two parent chromosomes exchange information after that point (see Figure 3).
 
-![8209e426ed5b7afdf7828b1be948cdc2.png](/99cbb5954bbd4cb6a2d4cfbb9f73a0a8.png)
+![8209e426ed5b7afdf7828b1be948cdc2.png](/99cbb5954bbd4cb6a2d4cfbb9f73a0a8)
 
 **Figure 3:** Demonstration of a simple single-point crossover on arbitrary chromosomes of length 6 with crossover point 2.
 
 Crossover is applied after, or sometimes during, selection, and with a certain probability defined as the crossover rate.
 Mutation is intended to simulate random genetic mutation in nature, but tends to be used more frequently in GAs than in nature in order to encourage population diversity and prevent premature convergence. If one thinks of crossover as a binary genetic operator (acting on two parents), mutation can be thought of as a unary genetic operator. As with crossover, a mutation rate is defined to control how often mutation is applied. In some GAs, probability of mutation is implemented on a per-gene basis. A mutation rate of 0.01 (1%) would mean each gene has a one percent chance of being mutated. In all GAs implemented as part of this work, however, probability of mutation applies to each chromosome. A 0.01 mutation rate would mean each chromosome has a 1% chance of being mutated. A chromosome selected for mutation would then have one of its genes selected at random and given a new random state.
 
-![4e78ab5abb87f7f18740dfa4c0df8aa9.png](/6c695eab1f744ca2aab893cfb7b8736a.png)
+![4e78ab5abb87f7f18740dfa4c0df8aa9.png](/6c695eab1f744ca2aab893cfb7b8736a)
 
 **Figure 4:** Classic mutation at locus 1 on an arbitrary 8-bit chromosome.
 
