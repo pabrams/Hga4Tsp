@@ -2,5 +2,4 @@
 *
 
 # exception to the rule
-*.MD 
-*.md
+!*.md
