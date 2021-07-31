@@ -1,0 +1,2 @@
+blob/main/*
+!blob/main/*.md
