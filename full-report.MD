@@ -226,11 +226,11 @@ This work does not attempt in any way to provide a formal mathematical descripti
 The software system implemented on disk accompanying this submitted document will be referred to by its title, MetaGA4TSP.
 
 The following software packages were used for the completion of this project:
-• code editing: Sun One Studio 4 update 1, Community Edition, freely available from java.sun.com.
-• compiling and testing: Windows XP command prompt, java SDK v1.4.1
-• this document: MS Word from Office XP 2002. (Now converted to markdown)
-• bitmaps: Hypersnap-DX v4.31 by Hyperionics; MS Paint
-• graphs: Microsoft Excel from MS Office XP 2002
+- code editing: Sun One Studio 4 update 1, Community Edition, freely available from java.sun.com.
+- compiling and testing: Windows XP command prompt, java SDK v1.4.1
+- this document: MS Word from Office XP 2002. (Now converted to markdown)
+- bitmaps: Hypersnap-DX v4.31 by Hyperionics; MS Paint
+- graphs: Microsoft Excel from MS Office XP 2002
 
 For those who wish, it may be beneficial to run the included software for demonstration purposes while reading this document. Installation and execution instructions are given in Appendix C.
 
