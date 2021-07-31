@@ -8,7 +8,7 @@
 
 ## 95.495 Honours Project
 
-## Winter 2003 (converted to markdown, with minor edits, 2020-07-30)
+## Winter 2003 (converted to markdown, with minor edits, 2021-07-30)
 
 ## Carleton University
 
