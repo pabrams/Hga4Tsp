@@ -18,7 +18,7 @@
 
 * * *
 
-##ACKNOWLEDGEMENTS
+## ACKNOWLEDGEMENTS
 
 My Mother, Father and Sister. From Carleton University administration: Lisa Ralph, Judith Srna, Michele Morrison. Carleton University professors: Tony White, Franz Oppacher, Douglas Howe.
 
