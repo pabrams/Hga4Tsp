@@ -287,7 +287,7 @@ The path representation simply lists the cities in the order they are visited, s
 
 This means that if the starting city is not fixed at a certain spot, there will be a large number of path representations generated whose tours are duplicates of other tours. For example, in a TSP of n=5, the permutations 12345, 23451, 34512, 45123 and 51234 all represent the same tour. It also represents twice more tours than required by traversing the path in a different direction, eg the tours 12345 and 15432 give the same distance and graphical representation and start at the same city, but have different path representations. Despite these problems, it was decided the path representation would be used in every TSP GA involved in the meta-GA. Making the representation used adaptable was briefly considered, but it was rejected in light of probable implementation difficulties as well as the fact that most of the other operators are designed for one particular representation.
 
-![418e5c2e5fc49766e8fa495f7e5bcb1d.png](:/b4c7759973a74c4fa09be15604c05bc1)
+![418e5c2e5fc49766e8fa495f7e5bcb1d.png](:/b4c7759973a74c4fa09be15604c05bc1?raw=true)
 **Figure 1**: All twelve unique tours on a TSP of size n=5 in graphical and path representations.
 
 These considerations give us a value (n-1)!/2 for the number of unique tours on a TSP of size n. As an example, Figure 1 gives all unique tours for a TSP of size 5 in graphical form with one of the corresponding path representations. Although the pairs of mirror image tours (eg 12534 and 13425) appear to have the same distance, this is only a consequence of the chosen city pattern (pentagon-shaped) being symmetrical around the y-axis.
@@ -340,7 +340,7 @@ One wants to reward fit individuals when selecting the surviving members of the 
 
 Crossover is also known as recombination, or mating. It is a simulation of the sexual reproductive process which provides genetic inheritance. A great number of different crossover operators have been developed for various purposes. One of the first and simplest is the simple single-point crossover, where a crossover point is chosen at random, and the two parent chromosomes exchange information after that point (see Figure 3).
 
-![8209e426ed5b7afdf7828b1be948cdc2.png](:/99cbb5954bbd4cb6a2d4cfbb9f73a0a8)
+![8209e426ed5b7afdf7828b1be948cdc2.png](:/99cbb5954bbd4cb6a2d4cfbb9f73a0a8?raw=true)
 **Figure 3:** Demonstration of a simple single-point crossover on arbitrary chromosomes of length 6 with crossover point 2.
 
 Crossover is applied after, or sometimes during, selection, and with a certain probability defined as the crossover rate.
