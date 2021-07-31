@@ -1,6 +1,6 @@
 # exclude everything
-Hga4Tsp/*
+*
 
 # exception to the rule
-!Hga4Tsp/*.MD 
-!Hga4Tsp/*.md
+*.MD 
+*.md
