@@ -2,15 +2,8 @@
  by
  
  J. Paul Abrams
- 
- Student No. 214937
- 
- 95.495 Honours Project
- 
- Winter 2003
- 
+ Winter 2003 (converted to markdown 2021-07-30)
  Carleton University
- 
  School of Computer Science
  
  Supervisor: Dr. Franz Oppacher
