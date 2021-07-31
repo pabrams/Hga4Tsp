@@ -1,20 +1,12 @@
-## A Hierarchical Genetic Algorithm for the Travelling Salesman Problem
-
-## By
-
-## J. Paul Abrams
-
-## 214937
-
-## 95.495 Honours Project
-
-## Winter 2003 (converted to markdown, with minor edits, 2021-07-30)
-
-## Carleton University
-
-## School of Computer Science
-
-## Supervisor: Dr. Franz Oppacher
+# A Hierarchical Genetic Algorithm for the Travelling Salesman Problem
+ by
+ J. Paul Abrams
+ Student No. 214937
+ 95.495 Honours Project
+ Winter 2003
+ Carleton University
+ School of Computer Science
+ Supervisor: Dr. Franz Oppacher
 
 * * *
 
@@ -24,87 +16,99 @@ My Mother, Father and Sister. From Carleton University administration: Lisa Ralp
 
 ## ABSTRACT
 
-This work uses a hierarchical approach in an attempt to optimize a set of parameters for a genetic algorithm for the traveling salesman problem using path representation. It defines a ‘meta-chromosome’ made up of seven genes encoding the following parameters, in order of occurrence on the chromosome: replacement scheme (single-offspring replacement, double-offspring replacement or simple heuristic single-offspring replacement); elitism rate (varying from 0-100 percent in one percent increments); mutation type (exchange, insertion, simple inversion, displacement or inversion); probability of mutation (varying in the same manner as with elitism rate); crossover method (partially-mapped, cycle, order, edge-recombination or maximal preservative); probability of crossover (varying as with mutation rate); selection method (tournament-5, roulette-wheel, uniform random or rank). Results show definite preferences for rank selection and heuristic replacement over their respective alternatives, but other results are largely inconclusive, probably due to similarity in operator efficiency among the mutation and crossover operators used. The work at least provides some evidence that meta-GAs can be an effective strategy to provide insight towards optimal parameter sets for other GAs.
+This work uses a hierarchical approach in an attempt to optimize a set of parameters for a genetic algorithm for the traveling salesman problem using path representation. It defines a ‘meta-chromosome’ made up of seven genes encoding the following parameters, in order of occurrence on the chromosome: 
+- Replacement scheme (single-offspring replacement, double-offspring replacement or simple heuristic single-offspring replacement); 
+- elitism rate (varying from 0-100 percent in one percent increments); 
+- mutation type (exchange, insertion, simple inversion, displacement or inversion); 
+- probability of mutation (varying in the same manner as with elitism rate); 
+- crossover method (partially-mapped, cycle, order, edge-recombination or maximal preservative); 
+- probability of crossover (varying as with mutation rate); 
+- selection method (tournament-5, roulette-wheel, uniform random or rank). 
+
+Results show definite preferences for rank selection and heuristic replacement over their respective alternatives, but other results are largely inconclusive, probably due to similarity in operator efficiency among the mutation and crossover operators used. The work at least provides some evidence that meta-GAs can be an effective strategy to provide insight towards optimal parameter sets for other GAs.
 
 ## CONTENTS
 
-LIST OF FIGURES 7
-LIST OF TABLES 9
-PREFACE 10
-CHAPTER 1: INTRODUCTION 11
-1.1 Motivation 12
-1.2 Goal 13
-1.3 Organization 13
-CHAPTER 2: BACKGROUND 15
-2.1 The Travelling Salesman Problem 15
-2.2 Genetic algorithms 19
-2.2.1 Population 19
-2.2.2 Fitness 20
-2.2.3 Selection 21
-2.2.4 Crossover and mutation 21
-2.2.5 Generating the new population 22
-2.2.6 The Fitness Landscape 23
-2.3 Methods of optimizing parameters for genetic algorithms 23
-2.3.1 Hierarchical genetic algorithms 23
-2.3.2 Coevolution 24
-CHAPTER 3: IMPLEMENTATION 27
-3.1 Description of implemented TSP operators 27
-3.1.1 Mutation operators on path representation 28
-3.1.1.1 Exchange mutation (EM) 28
-3.1.1.2 Insertion mutation (ISM) 28
-3.1.1.3 Simple inversion mutation (SIM) 29
-3.1.1.4 Displacement mutation (DM) 29
-3.1.1.5 Inversion mutation (IVM) 29
-3.1.2 Crossover operators on path representation 30
-3.1.2.1 Partially mapped crossover (PMX) 30
-3.1.2.2 Cycle crossover (CX) 31
-3.1.2.3 Order crossover (OX) 32
-3.1.2.4 Edge recombination crossover (ERX) 33
-3.1.2.5 Maximal preservative crossover (MPX) 35
-3.1.4 Methods of selection and replacement 35
-3.1.4.1 Roulette wheel selection (RWS) 36
-3.1.4.2 Rank selection (RS) 36
-3.1.4.3 Tournament-5 selection (T5S) 37
-3.1.4.4 Replacement schemes (S1R, S2R, H1R) 37
-3.2 The MetaGA4TSP system 39
-3.2.1 Meta-evolution 39
-3.2.2 The meta-GA chromosome 40
-3.2.2.1 Meta-GA chromosome fitness 42
-3.2.2.2 Meta-GA crossover 42
-3.2.2.2 Meta-GA mutation 43
-3.3 The TSP GA 43
-CHAPTER4: TESTING AND RESULTS 44
-4.1 Test plan 44
-4.1.1 TSP test instances 44
-4.1.2 Test parameters 45
-4.1.3 Test runs 46
-Test 1 46
-Test 2 47
-Test 3 47
-Test 4 47
-Test 5 47
-Test 6 47
-Test 7 47
-Test 8 47
-4.2 Results 48
-4.2.1 Average and best fitnesses of meta-GA chromosomes by generation 48
-4.2.2 Best meta-GA chromosomes found in each iteration of each test. 51
-Test 1 51
-Test 4 53
-Test 5 53
-Test 6 54
-Test 7 55
-CHAPTER5: CONCLUSION 57
-5.1 Problems encountered and potential solutions 58
-5.2 Opportunity for future work 59
-REFERENCES 61
-APPENDIX A: ADDITIONAL TEST DATA 64
-APPENDIX B: JAVA IMPLEMENTATION 75
-Java classes 75
-APPENDIX C: THE SOFTWARE 77
-Installation 77
-Execution 78
-GLOSSARY 81
+  * [ACKNOWLEDGEMENTS](#acknowledgements)
+  * [ABSTRACT](#abstract)
+  * [CONTENTS](#contents)
+  * [LIST OF FIGURES](#list-of-figures)
+  * [LIST OF TABLES](#list-of-tables)
+  * [PREFACE](#preface)
+  * [CHAPTER 1: INTRODUCTION](#chapter-1--introduction)
+    + [1.1 Motivation](#11-motivation)
+    + [1.2 Goal](#12-goal)
+    + [1.3 Organization](#13-organization)
+  * [CHAPTER 2: BACKGROUND](#chapter-2--background)
+    + [2.1 The Travelling Salesman Problem](#21-the-travelling-salesman-problem)
+    + [2.2 Genetic algorithms](#22-genetic-algorithms)
+      - [2.2.1 Population](#221-population)
+      - [2.2.2 Fitness](#222-fitness)
+      - [2.2.3 Selection](#223-selection)
+      - [2.2.4 Crossover and mutation](#224-crossover-and-mutation)
+      - [2.2.5 Generating the new population](#225-generating-the-new-population)
+      - [2.2.6 The Fitness Landscape](#226-the-fitness-landscape)
+    + [2.3 Methods of optimizing parameters for genetic algorithms](#23-methods-of-optimizing-parameters-for-genetic-algorithms)
+      - [2.3.1 Hierarchical genetic algorithms](#231-hierarchical-genetic-algorithms)
+      - [2.3.2 Coevolution](#232-coevolution)
+  * [CHAPTER 3: IMPLEMENTATION](#chapter-3--implementation)
+    + [3.1 Description of implemented TSP operators](#31-description-of-implemented-tsp-operators)
+      - [3.1.1 Mutation operators on path representation](#311-mutation-operators-on-path-representation)
+        * [3.1.1.1 Exchange mutation (EM)](#3111-exchange-mutation--em-)
+        * [3.1.1.2 Insertion mutation (ISM)](#3112-insertion-mutation--ism-)
+        * [3.1.1.3 Simple inversion mutation (SIM)](#3113-simple-inversion-mutation--sim-)
+        * [3.1.1.4 Displacement mutation (DM)](#3114-displacement-mutation--dm-)
+        * [3.1.1.5 Inversion mutation (IVM)](#3115-inversion-mutation--ivm-)
+      - [3.1.2 Crossover operators on path representation](#312-crossover-operators-on-path-representation)
+        * [3.1.2.1 Partially mapped crossover (PMX)](#3121-partially-mapped-crossover--pmx-)
+        * [3.1.2.2 Cycle crossover (CX)](#3122-cycle-crossover--cx-)
+        * [3.1.2.3 Order crossover (OX)](#3123-order-crossover--ox-)
+        * [3.1.2.4 Edge recombination crossover (ERX)](#3124-edge-recombination-crossover--erx-)
+        * [3.1.2.5 Maximal preservative crossover (MPX)](#3125-maximal-preservative-crossover--mpx-)
+      - [3.1.4 Methods of selection and replacement](#314-methods-of-selection-and-replacement)
+        * [3.1.4.1 Roulette wheel selection (RWS)](#3141-roulette-wheel-selection--rws-)
+        * [3.1.4.2 Rank selection (RS)](#3142-rank-selection--rs-)
+        * [3.1.4.3 Tournament-5 selection (T5S)](#3143-tournament-5-selection--t5s-)
+        * [3.1.4.4 Replacement schemes (S1R, S2R, H1R)](#3144-replacement-schemes--s1r--s2r--h1r-)
+    + [3.2 The MetaGA4TSP system](#32-the-metaga4tsp-system)
+      - [3.2.1 Meta-evolution](#321-meta-evolution)
+      - [3.2.2 The meta-GA chromosome](#322-the-meta-ga-chromosome)
+        * [3.2.2.1 Meta-GA chromosome fitness](#3221-meta-ga-chromosome-fitness)
+        * [3.2.2.2 Meta-GA crossover](#3222-meta-ga-crossover)
+        * [3.2.2.2 Meta-GA mutation](#3222-meta-ga-mutation)
+    + [3.3 The TSP GA](#33-the-tsp-ga)
+  * [CHAPTER4: TESTING AND RESULTS](#chapter4--testing-and-results)
+    + [4.1 Test plan](#41-test-plan)
+      - [4.1.1 TSP test instances](#411-tsp-test-instances)
+      - [4.1.2 Test parameters](#412-test-parameters)
+      - [4.1.3 Test runs](#413-test-runs)
+    + [4.2 Results](#42-results)
+      - [4.2.1 Average and best fitnesses of meta-GA chromosomes by generation](#421-average-and-best-fitnesses-of-meta-ga-chromosomes-by-generation)
+      - [4.2.2 Best meta-GA chromosomes found in each iteration of each test.](#422-best-meta-ga-chromosomes-found-in-each-iteration-of-each-test)
+        * [Test 1](#test-1)
+        * [Test 2](#test-2)
+        * [Test 3](#test-3)
+        * [Test 4](#test-4)
+        * [Test 5](#test-5)
+        * [Test 6](#test-6)
+        * [Test 7](#test-7)
+        * [Test 8](#test-8)
+  * [CHAPTER 5: CONCLUSION](#chapter-5--conclusion)
+    + [5.1 Problems encountered and potential solutions](#51-problems-encountered-and-potential-solutions)
+    + [5.2 Opportunity for future work](#52-opportunity-for-future-work)
+  * [REFERENCES](#references)
+  * [APPENDIX A: ADDITIONAL TEST DATA](#appendix-a--additional-test-data)
+  * [APPENDIX B: JAVA IMPLEMENTATION](#appendix-b--java-implementation)
+    + [Java classes](#java-classes)
+  * [APPENDIX C: THE SOFTWARE](#appendix-c--the-software)
+    + [Installation](#installation)
+    + [Execution](#execution)
+  * [GLOSSARY](#glossary)
+  * [End Notes (Formerly footnotes)](#end-notes--formerly-footnotes-)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 
 ## LIST OF FIGURES
 
@@ -238,15 +242,15 @@ The GA model and its terminology is borrowed from biology, since the biological 
 
 During the study of genetic algorithms, many different types of crossover and mutation operators have been implemented, and many different selection methods and replacement schemes been examined, with varying degrees of success, usually on specific problems. It has been found that the implementation of the genetic algorithm depends very much on the problem being solved. In addition, even within a single problem domain different results have been achieved depending on the instance of the problem being solved as well as its size. One of the biggest problems encountered when using genetic algorithms is the problem of deciding which parameters and operators to use for a given problem.
 
-## 1.1 Motivation
+### 1.1 Motivation
 
 The idea of simulating and automating the process of evolution in order to solve optimization problems is a fascinating one and has attracted a great deal of attention. This has resulted in extensive debate on how exactly evolution should proceed. How often should genetic mutation occur? How should reproduction be implemented? Unfortunately the answers to these questions vary with the problem being solved, but in order to enable implementation it was necessary to choose a specific problem, due to time constraints. For this reason, the Travelling Salesman Problem (TSP, described in Chapter 2) has been chosen as a test-bed for this work. The TSP is chosen because it has been extensively studied using evolutionary methods. Many genetic operators have been developed specifically for the TSP, but there is debate over which combinations of operators perform the best. The TSP was previously studied in the context of GAs during work in a course on evolutionary programming at Carleton University with Professor Franz Oppacher. A genetic algorithm was implemented to solve TSP (a generic genetic algorithm for TSP is heretofore referred to as TSP GA) as a course assignment. Students were to choose on their own which crossover, mutation and selection methods to use. Several operators were at that time implemented, and during implementation it was observed that the choice of operators, operator parameters and genetic parameters gave different qualities of results depending on the TSP instance being solved. It was wondered whether another GA could solve the problem of which combinations of parameters and operators were best, so that continual changing of parameters and running the genetic algorithm repeatedly could be avoided. It is this question that motivates this work.
 
-## 1.2 Goal
+### 1.2 Goal
 
 The goal is to discover whether the problem of which parameters to use in a genetic algorithm for the Traveling Salesman Problem can be alleviated by using another genetic algorithm to evolve the parameter set in question. In order to accomplish this, a system that will be referred to throughout this document as MetaGA4TSP has been implemented in the java programming language. It should be stressed that no attempt is made to solve any particular TSP instance using fewer evaluations than have been conducted in other work. There are many heuristic operators and methods which exist for genetic TSP which have not been implemented but would be conducive to faster convergence of the TSP GA to good solutions. If MetaGA4TSP succeeds in finding good sets of parameters and operators among the ones chosen, it would be possible to implement other operators in the future which may perform better than any of the basic ones implemented here. Since no other similar work with which to compare the MetaGA4TSP system was found in time, an intermediate goal will be to show that the system evolves better parameter sets through evolution than are obtained by random selection.
 
-## 1.3 Organization
+### 1.3 Organization
 
 This report is organized as follows.
 
@@ -261,7 +265,7 @@ This report is organized as follows.
 
 Enormous time and energy has been consumed by the scientific community studying intractable problems, or problems whose only known algorithmic solutions require an amount of time (or number of execution steps) which increases exponentially with respect to the size of the problem. In fact, much of the time spent is on a class of problems known as "NP-complete", whose tractability is unknown.{1} A problem is NP-complete if no polynomial-time solution has been found but it has not been proven that there does not exist such a solution. An interesting property of this huge class of problems is that if any one of them can be proven tractable, then immediately all other NP-complete problems are proven tractable as well. Conversely, if any NP-complete problem is proven intractable, then all NP-complete problems must also be intractable. For this reason, most computer scientists classify NP-complete problems as intractable, since it is exceedingly unlikely that many of the world's greatest minds have failed to find a polynomial-time solution to any of the huge number of NP-complete problems discovered if a solution actually exists. One member of the NP-complete class of problems, and possibly the most well-known, is the Travelling Salesman Problem (TSP).
 
-## 2.1 The Travelling Salesman Problem
+### 2.1 The Travelling Salesman Problem
 
 Simply stated, the TSP is the problem of finding the shortest way to visit a group of points (cities) under the restriction that each point must be visited exactly once. It was first documented by Euler in 1759 (Larranaga et al, 1999), but it is almost certain that the problem was considered by many people before that time. Potential solutions to the TSP are called tours, and are Hamiltonian cycles on the complete graph formed by the n cities in the TSP instance (Mathias & Whitley, 1992, pp. 1). In the two-dimensional Euclidian TSP, which is the only version considered here and is also probably the most simple and common, a particular solution’s quality is determined by summing the distances between each of the adjacent cities in the tour, or equivalently summing all the edge weights in the tour.
 
@@ -284,25 +288,22 @@ Since NP-complete problems like the TSP are so time consuming to solve by brute 
 
 * * *
 
-## 2.2 Genetic algorithms
+### 2.2 Genetic algorithms
 
 In 1975, J. Holland introduced genetic algorithms (GAs), which are a computational method of simulating nature's evolutionary methods in an attempt to solve some of our own optimization problems. Holland, along with various researchers following his work, showed that life is not required for evolution to occur. All that is required is competition for resources among individuals in a population, a mechanism for copying or reproduction with inheritance, and some form of variability (Oppacher, 1999).
 According to Larrañaga et al (1999), the first person to attempt to solve TSP with genetic algorithms was Brady (1985).
 In order to introduce the concept of genetic algorithms, Figure 2 provides an informal example of a simple GA. We will examine each step of this algorithm in some detail in the next sections.
 
 * * *
-
 1.  Randomly generate an initial population.
 2.  Calculate fitness for each individual in the population.
 3.  Probabilistically select surviving members of the current population based on their relative fitnesses.
 4.  Generate the next generation by applying genetic operators (mutation and crossover) to the surviving individuals.
 5.  Repeat steps 2 through 4 indefinitely, or until a halting condition is met (for example the desired maximum number of generations is exceeded).
-
 * * *
-
 **Figure 2:** A basic genetic algorithm in high-level pseudocode.
 
-## 2.2.1 Population
+#### 2.2.1 Population
 
 A population is generally represented as a group of individuals whose properties are specified by their genomes which are made up of one or more chromosomes. In this work, only single-chromosome individuals are used and so the terms individual and chromosome will be virtually synonymous. The number of genes in a chromosome and the number of alleles per gene (the number of different states each gene can have) vary depending on the problem being addressed by the GA. A simple chromosome might be made up of a set of bits, each bit specifying yes or no for some attribute. Often however, 2-state attributes aren't sufficient. In the meta-GA developed here to optimize TSP parameters, for example, each chromosome will be made up of seven genes, three of which have 100 possible states. The chromosome for a TSP solution in path representation, on the other hand, is made up of n genes, where n is the number of cities in the TSP. Each gene may take on a value between 0 and n-1 (inclusive)4. Some GAs may also change the order in which each gene occurs in the chromosome5, however both GAs used in this work maintain fixed-order (as well as fixed-length) chromosomes. For example, the first gene in a TSP chromosome will always indicate the start city, the second gene indicates the next city visited, etc.
 
@@ -310,9 +311,10 @@ The size of the population is one of the GA parameters whose best value is widel
 
 The initial state of the population is usually a randomly generated set of individuals, but there have been many attempts to improve evolutionary results by starting with a population that has been heuristically generated or optimized. It is yet another source of debate whether or not this should be done, for which problems, and how it should be accomplished. The first task after generation of the initial population is to evaluate the fitness of its individuals.
 
-## 2.2.2 Fitness
+#### 2.2.2 Fitness
 
-“Critical to any model of natural selection is the concept of an individual’s fitness.” (Morrison, 1998, p. 2).
+> Critical to any model of natural selection is the concept of an individual’s fitness.
+(Morrison, 1998, p. 2).
 
 In nature, an individual’s fitness is represented by its ability to pass on its genetic material. Any quality that contributes to this ability contributes to the organism’s overall fitness. This includes, obviously, traits which enable survival in species where there is competition for survival, since one must first survive if one wishes to reproduce. Some of the literature distinguishes between survival fitness and reproductive fitness (eg Morrison, 1998, pp. 3). In this work, only reproductive fitness is considered relevant.
 
@@ -322,11 +324,11 @@ In a TSP chromosome, fitness is easy to calculate. TSP attempts to find the shor
 
 The calculation of an individual’s fitness is the driving force behind evolution and specifies the direction in which the population will converge.
 
-## 2.2.3 Selection
+#### 2.2.3 Selection
 
 One wants to reward fit individuals when selecting the surviving members of the population, but not to the point where those individuals will dominate the population prematurely. If a certain subclass of individual (schema) is allowed to dominate the population, other better individuals may never be discovered. There are many different selection methods, but most rely on assigning probabilities of selection to each member of the population based on their fitness. Some popular selection methods are Roulette-Wheel selection, Rank selection and Tournament selection, all of which will be described in Chapter 3: Implementation.
 
-## 2.2.4 Crossover and mutation
+#### 2.2.4 Crossover and mutation
 
 Crossover is also known as recombination, or mating. It is a simulation of the sexual reproductive process which provides genetic inheritance. A great number of different crossover operators have been developed for various purposes. One of the first and simplest is the simple single-point crossover, where a crossover point is chosen at random, and the two parent chromosomes exchange information after that point (see Figure 3).
 
@@ -341,58 +343,60 @@ Mutation is intended to simulate random genetic mutation in nature, but tends to
 
 Many different crossover and mutation operators have been implemented as required for different problems which use particular chromosome representations. We shall see several examples of this with the path representation for the TSP when the implementation is discussed in Chapter3.
 
-## 2.2.5 Generating the new population
+#### 2.2.5 Generating the new population
 
 In much of the literature, a distinction is made between what are referred to as steady-state GAs and generational GAs. These two methods represent the extremes of replacing only one or two members of the population and replacing all of them at each generation of evolution. The same literature also discusses a method commonly known as elitism, which keeps a certain number of the best individuals from each generation and copies them to the new generation. By these definitions, a high elitism rate would simulate a steady-state GA while a low elitism rate would simulate a generational GA.
 
 As with other aspects of the GA, generation of the new population can vary depending on the implementation.
 
-## 2.2.6 The Fitness Landscape
+#### 2.2.6 The Fitness Landscape
 
 We have seen that genetic algorithms maintain a working memory of potential solutions to a problem which take the form of individuals in a population. Each of these individuals occupies some point in the search space (the space containing all potential solutions to a problem). Since each point in the search space has a unique ‘fitness’ associated with it, the search space can theoretically7 be envisaged as a ‘fitness landscape’. In a genetic algorithm the population defines the method(s) by which each generation of individuals will be replaced by a new generation, i.e. how the new points in the search space will be found. The idea, of course, is to find the highest point(s) in the search space.
 Some of the literature focuses on examining the fitness landscape for a given problem mathematically (see for a TSP example Mathias and Whitley, 1992), but this sort of analysis is beyond the scope of this document.
 
-## 2.3 Methods of optimizing parameters for genetic algorithms
+### 2.3 Methods of optimizing parameters for genetic algorithms
 
 According to Smith and Fogarty (1997, pp. 3), the first major study which attempted to identify suitable sets of parameters for a GA was done by DeJong (1975). His study “identified a suite of test functions and proposed a set of parameters which it was hoped would work well across a variety of problem types” (Smith and Fogarty, 1997, pp.3). Apparently this method of optimizing parameter sets is unreliable since “later studies using a ‘meta-ga’ to learn suitable values \[Grefenstette (1986)\] or using exhaustive testing \[Schaffer et al. (1989)\] arrived at different conclusions” (Smith and Fogarty, 1997, pp.3).
 
-## 2.3.1 Hierarchical genetic algorithms
+#### 2.3.1 Hierarchical genetic algorithms
 
 Hierarchical GAs, or meta-GAs, are genetic algorithms that act on populations of other genetic algorithms. This includes some parallel, distributed and coevolutionary genetic algorithms, however those are generally referred to using more specific designations.
 
 In this work, one of the simplest forms of meta-GA is implemented. It is simply a GA whose fitness calculation phase involves running another GA. There is no interaction among sub-GAs, and they are run in sequence. The implementation is described in detail in Chapter 3. The reason why meta-GA was selected to tune parameters cannot be better expressed than in the following passage:
 
-<span style="font-size: small;">T*here are a number of reasons why the meta-GA method is attractive for GA factors tuning. First of all, the number of GA factors present and their levels of magnitude as well as the interaction between these factors together with stochastic features of genetic algorithms make the set of all possible GA factor settings extremely difficult to search through. The thrust of meta-GA utilization is that massive parallelism of ‘meta-genetic algorithm’, may be brought to bear on the problem of examining the set of all possible factor settings for an objective genetic algorithm (Freisleben and Hartfelder, 1993). A second advantage of the meta-GA approach is that it retains the ability to carry out unbiased and automated optimization. For these reasons, we regard meta-GA optimization as a credible contestant for our approach to GA factor tuning \[…\]*”|</span>
-
-- (Petrovski and McCall, 1998, pp.3)
+ > There are a number of reasons why the meta-GA method is attractive for GA factors tuning. First of all, the number of GA factors present and their levels of magnitude as well as the interaction between these factors together with stochastic features of genetic algorithms make the set of all possible GA factor settings extremely difficult to search through. The thrust of meta-GA utilization is that massive parallelism of ‘meta-genetic algorithm’, may be brought to bear on the problem of examining the set of all possible factor settings for an objective genetic algorithm (Freisleben and Hartfelder, 1993). A second advantage of the meta-GA approach is that it retains the ability to carry out unbiased and automated optimization. For these reasons, we regard meta-GA optimization as a credible contestant for our approach to GA factor tuning \[…\]
+ >  (Petrovski and McCall, 1998, pp.3)
 
 There are countless possible variations of the simple meta-GA. One class of variations involves running each sub-GA in parallel, with possible exchange of information between GAs. Other variations might use different representations of meta-GA chromosome. For example, instead of having a single gene which encodes the type of operator used (as in MetaGA4TSP), one could have a gene for each operator, with possible alleles representing the probability of that operator’s application. This would define a completely different meta-GA than the one implemented here.
 
-## 2.3.2 Coevolution
+#### 2.3.2 Coevolution
 
-Coevolution8 is a somewhat difficult and misunderstood concept. By one definition,
-<span style="font-size: small;">“co-evolution is defined by the presence of Natural Selection, on a group of individuals, whose fitnesses are interdependent”</span> (Morrison, 1998, pp. 21).
+Coevolution{8} is a somewhat difficult and misunderstood concept. By one definition,
+ > co-evolution is defined by the presence of Natural Selection, on a group of individuals, whose fitnesses are interdependent
+ >  (Morrison, 1998, pp. 21).
 
 As Morrison points out, this definition can include the simple GA, since individuals’ fitnesses are indeed interdependent for many if not most GAs. It also includes a large number of other variants of GA. Indeed, the main goal of Morrison’s work is to formulate formal working definitions for coevolution. Eventually, Morrison gives the following definition for coevolution:
-“Co-evolution of a population with itself occurs when individuals within the population are in symbiosis with other individuals in the same population. Co-evolution of a pair of populations with each other occurs when individuals in one population are in symbiosis with individuals of the other population.” (pp. 136) “Symbiosis is defined by a relationship between two individuals where the fitness of one individual directly affects the fitness of the other individual.” (Morrison, 1998, pp. 136).
+>Co-evolution of a population with itself occurs when individuals within the population are in symbiosis with other individuals in the same population. Co-evolution of a pair of populations with each other occurs when individuals in one population are in symbiosis with individuals of the other population.” (pp. 136) “Symbiosis is defined by a relationship between two individuals where the fitness of one individual directly affects the fitness of the other individual.
+(Morrison, 1998, pp. 136).
 
 This definition seems a little broad, and even slightly inaccurate, since it allows co-evolution without evolution. The Merriam-Webster definition for coevolution is
-“evolution involving successive changes in two or more ecologically interdependent species (as of a plant and its pollinators) that affect their interactions” (Merriam-Webster, 1965).
+> evolution involving successive changes in two or more ecologically interdependent species (as of a plant and its pollinators) that affect their interactions
+>  (Merriam-Webster, 1965).
 
 Using this definition, it would make sense that coevolution in computer science would involve interaction of different species. Mr. Morrison does admit elsewhere in the paper that coevolution is a relationship among species:
-“Co-evolution refers to the evolution of multiple species that affect one another. As one species evolves it changes the relationship it has with surrounding species.” (Morrison, 1998, pp. 24)
+> Co-evolution refers to the evolution of multiple species that affect one another. As one species evolves it changes the relationship it has with surrounding species. (Morrison, 1998, pp. 24)
 
-This passage, while not portrayed as a definition in Morrison’s work, seems a more accurate, or at least more specific, description of coevolution.
+This passage, although not specifically flagged by Morrison as a definition, seems a more accurate, or at least more specific, description of coevolution.
 
-Originally it was proposed that this project would attempt to use coevolutionary methods of evolving TSP GA parameters. However, due to mass disagreement on precisely what was meant by coevolution9, research in that direction was abandoned when the meta-GA structure was decided upon. Before abandoning research in coevolutionary methods, it was believed that coevolution must involve a predator-prey relationship between two species, which is more specific than any of the definitions given above, and it was not clear how precisely this would apply to the TSP GA situation.
+Originally it was proposed that this project would attempt to use coevolutionary methods of evolving TSP GA parameters. However, due to mass disagreement on precisely what was meant by coevolution{9}, research in that direction was abandoned when the meta-GA structure was decided upon. Before abandoning research in coevolutionary methods, it was believed that coevolution must involve a predator-prey relationship between two species, which is more specific than any of the definitions given above, and it was not clear how precisely this would apply to the TSP GA situation.
 
 Although MetaGA4TSP qualifies as a coevolutionary system, it is a very specific type. The TSP tour species does not evolve at the same time as the GA parameter (meta-GA) species, but instead an entire TSP tour species is evolved for each individual in the GA parameter species. For this reason, the GA implemented is referred to as a hierarchical, or meta-, GA and not as a coevolutionary one.
 
 ## CHAPTER 3: IMPLEMENTATION
 
-The decision was made to implement the system in java mostly because this is the language in which the author is most proficient, but the language’s portability and its youth played some role in the decision also. There exist many GA toolkits which allow one to define the problem for which a solution is to be evolved, and also allow the user to define parameters for the GA. After working with several evolutionary toolkits in java10 including GAJIT (Faupel, 1999) and ECKit (Potter, 1999), it was decided to implement the meta-GA from the ground up, making it specific to TSP. This decision made most of the project almost pointless, in one sense, but certainly did not detract from the personal learning experience. The huge number of variants of GA was confusing, and too much time was being taken with familiarization with each of the methods in order to decide which one to use. In retrospect that decision should have been made before the bulk of research was performed.
+The decision was made to implement the system in java mostly because this is the language in which the author is most proficient, but the language’s portability and its youth played some role in the decision also. There exist many GA toolkits which allow one to define the problem for which a solution is to be evolved, and also allow the user to define parameters for the GA. After working with several evolutionary toolkits in java10 including GAJIT (Faupel, 1999) and ECKit (Potter, 1999), it was decided to implement the meta-GA from the ground up, making it specific to TSP. The huge number of variants of GA was bewildering, and too much effort was being used up in familiarization with each. In retrospect that decision should have been made before the bulk of research was performed.
 
-## 3.1 Description of implemented TSP operators
+### 3.1 Description of implemented TSP operators
 
 A detailed description of each operator used in the implementation of the meta-GA shall now be given. Each operator is assigned an alphanumeric short form which is used extensively in the implementation, and whenever possible is consistent with short forms used in the literature. For ease of identification, mutation operator short-forms end with an uppercase 'M', crossover operators with an 'X', selection methods with an 'S', and replacement schemes with an 'R'.
 
@@ -400,49 +404,49 @@ Note that when referring to a TSP individual, the terms chromosome, individual a
 
 Unless otherwise specified, the letter 'n' encountered by itself represents the number of cities in the TSP instance, or equivalently the number of genes in the TSPGA chromosome.
 
-## 3.1.1 Mutation operators on path representation
+#### 3.1.1 Mutation operators on path representation
 
 Due to the popularity of the TSP and path representation as test beds for evolutionary programming research, many mutation operators were developed which possess the advantage of mutating a TSP chromosome without forming an illegal tour. Only a few of the basic ones are implemented as alleles in the third gene of the meta-GA chromosome. It is considered important to understand their operation in detail in order to interpret the results of evolution of the meta-GA.
 
-## 3.1.1.1 Exchange mutation (EM)
+##### 3.1.1.1 Exchange mutation (EM)
 
 Exchange mutation \[Banzhaf, 1990\] solves the problem of generation of illegal tours by simply exchanging two of the cities in a tour, which always transforms a legal tour to another legal tour. Two unequal loci are chosen at random, and the cities at those indices of the chromosome are exchanged. Two examples are shown in Figure 5.
 
 ![fab6053b9df525b412d08b669b545ee2.png](:/97caad20cd4048d5bb9f92ec9e5be880)
 **Figure 5:** Output from two random demonstrations of exchange mutation on tours of size 6 from the MetaGA4TSP implementation.
 
-## 3.1.1.2 Insertion mutation (ISM)
+##### 3.1.1.2 Insertion mutation (ISM)
 
 Insertion mutation selects a city at random and replaces it in a new random spot in the chromosome. In MetaGA4TSP, the insertion spot is taken to be the larger index for simplicity. When the city is inserted in its new spot, the cities are shifted by one position each until the vacated spot is filled.
 
 ![0c02b621e46b0657c39376f940690551.png](:/82c41f88bb234265bf003b1bd63a5cf1)
 **Figure 6:** Output from two random demonstrations of insertion mutation from the MetaGA4TSP implementation on tours of size 6.
 
-## 3.1.1.3 Simple inversion mutation (SIM)
+##### 3.1.1.3 Simple inversion mutation (SIM)
 
 SIM acts on a substring of the tour rather than on one or two genes. It picks two loci on the chromosome at random, and reverses the order of the cities between those points. Examples are shown in Figure 7. This implementation enforces a substring length of three or more.
 
 ![f6d972b7b4ad3191070fa632a566fdb3.png](:/163da753bcc540098c590a9da51b32ea)
 **Figure 7:** Output from two random demonstrations of simple inversion mutation from the MetaGA4TSP implementation on tours of size 6.
 
-## 3.1.1.4 Displacement mutation (DM)
+##### 3.1.1.4 Displacement mutation (DM)
 
 This mutation operator picks a substring of the tour at random as with SIM, but instead of inverting the substring, it displaces it intact to a new locus. As with SIM, the substring length must be between 3 and n-1. Figure 8 gives two examples.
 
 ![5e64e7366d5f017b1fd7046f42ae34a0.png](:/a504bed618ff484c9c4fbf803238d2a4)
 **Figure 8:** Output from two random demonstrations of displacement mutation from the MetaGA4TSP implementation on tours of size 6.
 
-## 3.1.1.5 Inversion mutation (IVM)
+##### 3.1.1.5 Inversion mutation (IVM)
 
 IVM can be thought of as a combination of SIM and DM on the same substring of the tour. A random substring is chosen and inverted, and the inverted substring is replaced at a random locus of the chromosome. Two simple examples are given in Figure 9.
 ![db9c7e26a46ff76cfad745794dfa9869.png](:/57f9024b653f457280ec125f65484251)
 **Figure 9:** Output from two random demonstrations of inversion mutation from the MetaGA4TSP implementation on tours of size 6.
 
-## 3.1.2 Crossover operators on path representation
+#### 3.1.2 Crossover operators on path representation
 
 In the next sections, the crossover operators implemented in MetaGA4TSP are described. All crossover operations are binary, that is, they act on two parent individuals. The parents are referred to as parent1 and parent2. In the implementation, the crossover methods each produce a single child. However, the operators are not symmetric on the arguments, thus a different child is produced depending on whether its arguments are given in the order (parent1, parent2) or (parent2, parent1). The MetaGA4TSP demonstration program which is used to give examples of each operator outputs both offspring (except with ERX, for simplicity11). The number of offspring actually produced during evolution depends on the replacement method being used (see section 3.1.4.4).
 
-## 3.1.2.1 Partially mapped crossover (PMX)
+##### 3.1.2.1 Partially mapped crossover (PMX)
 
 According to Larrañaga et al (1999, pp.11), the PMX operator was first suggested by Goldberg and Lingle (1985). Like many of the crossover operators presented here, PMX starts by randomly choosing two points and exchanging the two parents' information between those loci. The remaining genes in the child are filled with the corresponding cities from the original tour (starting from the beginning of the tour) unless they are already present in the child. In such a case, the city to be placed at that locus is specified by the mappings formed by the selected substrings in the parent. In the 6-city example of Figure 10(a), for example, the mappings are 4&lt;-&gt;0, 0&lt;-&gt;2, and 5&lt;-&gt;3.
 
@@ -453,7 +457,7 @@ For the first child, the parent1 substring 405 is copied into the child at the s
 
 A second child is found in exactly the same manner as in the above paragraph except that parent1 and parent2 are interchanged.
 
-## 3.1.2.2 Cycle crossover (CX)
+##### 3.1.2.2 Cycle crossover (CX)
 
 Again according to Larrañaga et al (1999, pp.13), the cycle crossover operator was proposed by Oliver et al. (1987). It is distinguished mainly by its lack of crossover points, and is only suitable for single-child reproduction. Cycle crossover attempts to create an offspring, each of whose genes contain the same alleles as one of the parents' two genes at the corresponding position. An excellent description of cycle crossover is given in Larrañaga et al (1999, pp.13,14), but a basic description and example of the algorithm are also given here.
 
@@ -462,14 +466,14 @@ Again according to Larrañaga et al (1999, pp.13), the cycle crossover operator 
 
 The algorithm starts at the beginning of the chromosome and picks one of the parents at random from which to copy the first allele. In this example let us only discuss the first child in Figure 11 (3 1 5 2 4 0). For the first child allele, a coin was tossed and parent1 was the winner, so the 3 was copied to the child. Now the algorithm finds the position of the 3 in parent 2, which it finds at locus 1. Since the 3 is already used in the child, the algorithm copies the 1 from the corresponding spot in parent1 over to the child. Now of course, since the 1 is used the algorithm finds the 1 at the last locus of parent2 and copies the 0 over from parent1. The algorithm continues in this manner until all the child genes are filled. If it comes to a point where there is a choice between the two parents, it proceeds as with the first gene, by flipping a coin.
 
-## 3.1.2.3 Order crossover (OX)
+##### 3.1.2.3 Order crossover (OX)
 
 Larrañaga et al (1999, pp.15) credits the OX operator to Davis (1985). Like PMX, the algorithm starts by copying a substring of random length between 3 and n-1 inclusive from one of the parents to the child. Then the genes of the other parent are copied to the child (starting at the endpoint of the copied substring) in the same order in which they appear. If a gene is already present, it is simply skipped. For some reason, probably because the ordering property of the chromosome is somewhat preserved from both parents, this operator is very successful with the TSP. With small problem sizes (n=50 or fewer cities) it has dominated all preliminary MetaGA4TSP test evolutions. Examples are given in Figure 12.
 
 ![534bcb19d28990e6d4dccd3ffd683b6e.png](:/a3bb2d430504410bb82b014e89bd44c6)
 **Figure 12:** Output from the MetaGA4TSP Order crossover demonstration routine on randomly generated parents of a) size 6 and b) size 12.
 
-## 3.1.2.4 Edge recombination crossover (ERX)
+##### 3.1.2.4 Edge recombination crossover (ERX)
 
 Edge Recombination is attributed to Whitley et al. (1989) according to Larrañaga et al (1999, pp.18). It differs from most other recombination operators included with MetaGA4TSP because it focuses on conserving the edge information from the two parents. This is done by constructing an edge list for each city. An edge list for a graph lists all adjacent nodes for each node. With two parents, the edge lists for each parent are combined. In path representation, this is fairly easy since all incident edges to a city can be found by recording each city that is adjacent to that city in the path representation. With two parents, a city may have a minimum of two and a maximum of four edges in its edge list. Let us look at the edge list for city 0 in the example provided in Figure 13. In the first parent, it is easy to see that cities 2 and 5 are connected via edges to city 0, thus 2 and 5 are added to city 0's edge list. In the second parent, cities 2 and 10 are connected directly to city 0, but the edge 0-2 already exists in the edge list, so only the edge 0-10 is added. This simple process is repeated for each city. Of course, cities at the beginning or end of the path representation are adjacent to the city at the other extreme of the list, so in the example edge (3, 9) exists in parent 1 and edge (4, 2) exists in parent2. ****strong text****
 
@@ -478,7 +482,7 @@ Edge Recombination is attributed to Whitley et al. (1989) according to Larrañag
 Once the edge list has been built, the ERX algorithm builds a child tour by proceeding as follows. The first gene to be copied over is chosen by taking the shortest edge list. Ties are either broken randomly, or in the case of the ERX implemented in MetaGA4TSP the first such city encountered is chosen. In Figure 13 cities 0 and 2 both tie for the shortest edge list so 0 is chosen as the first city in the offspring. Whenever a city is chosen, all of its occurrences are removed from the right hand side of the edge list. For the next city, we want to choose the edge incident to the previous city whose other end itself has the shortest edge list. Since the previous city is 0, we see that our candidates for the next city are 2, 5 and 10. City 2 has the shortest edge list, so it is chosen to occupy locus #1 in the child. Computation proceeds in this manner until all the cities have been used. City 2 is connected to cities 1, 0 and 4 but 0 has already been used (and removed from city 2's edge list). The only remaining cities incident to city 2 are cities 1 and 4 which have equivalent edge list sizes so city 1 is chosen to break the tie.
 If this method of choosing the shortest edge list at each iteration was not used, there would be foreign edges introduced in the offspring. With this method, the only foreign edge which can be introduced is between the last and first cities. Larrañaga et al (1999, pp.18) offers a more thorough description and analysis of ERX.
 
-## 3.1.2.5 Maximal preservative crossover (MPX)
+##### 3.1.2.5 Maximal preservative crossover (MPX)
 
 The MPX operator used here is a slight variation of the one introduced by Muhlenbein et al. (1988). It works the same as OX, except that the chosen substring is always copied to the beginning of the child chromosome. Our version differs from the version of Muhlenbein et al. (1988) in that instead of using a range of \[10..(n/2)\] for the randomized substring length we have used the range \[3..(n-1)\]. This may cause poorer results at large problem sizes, but should have little effect with n at fifty or less.
 
@@ -487,18 +491,18 @@ The MPX operator used here is a slight variation of the one introduced by Muhlen
 
 It is easy to see from the example that the chosen substring from the first parent is copied to the front of the child chromosome, and the remaining genes are filled with alleles in the same order in which they occur in the second parent.
 
-## 3.1.4 Methods of selection and replacement
+#### 3.1.4 Methods of selection and replacement
 
 In MetaGA4TSP, a distinction is made between methods of selection of the parents for reproduction and methods of replacing the old population to generate the new one. This distinction is clarified eloquently by Jens Gottlieb and Torben Kruse:
 “The parent selection phase uses the fitness information to select parents for reproduction, while the replacement scheme determines how the next population is formed by the produced children and the old population. Algorithms like \[…\] GENITOR are usually considered as selection algorithms, but in fact they represent combined selection strategies consisting of a specific parent selection method and a specific replacement scheme.” (2000, pp. 415)
 
 The decision was made to separate these two processes in order to allow the possibility of determining the best combination of techniques for the two phases of selection. This section and its corresponding gene in the meta-GA chromosome deals with methods of selecting the parents from the old population to combine via crossover and/or copying to produce the children which will replace the old population in the manner specified by the replacement scheme. The next few sections describe the selection methods used, followed by the replacement schemes implemented.
 
-## 3.1.4.1 Roulette wheel selection (RWS)
+##### 3.1.4.1 Roulette wheel selection (RWS)
 
 In this method, parents are selected from the population probabilistically according to fitness-proportional selection. Each member of the population is assigned a selection probability proportional to its fitness. The easiest way to think of it is as a pie chart, with each member of the population possessing a piece of pie whose size is directly related to how fit that individual is. When a parent is selected from the population, the wheel (pie) is spun, and wherever it lands is the individual chosen. In MetaGA4TSP, when choosing two parents, the first parent is removed from the population before selecting the second parent to avoid selecting two identical individuals. However, selection is performed with replacement in the sense that the two parents are replaced in the population before selecting the next two parents, so that a single individual (especially if it’s very fit) may sire several offspring with different mates.
 
-## 3.1.4.2 Rank selection (RS)
+##### 3.1.4.2 Rank selection (RS)
 
 Rank selection involves ranking the individuals in a population from best to worst, and selecting parents based on that ranking. Thus it isn’t the individual’s absolute fitness that matters, but only whether or not it performed better than another member of the population. During selection, an individual at rank i is selected with probability pi where p is some number between 0 and 1.
 
@@ -506,12 +510,12 @@ The algorithm works by iterating through the population (sorted by fitness). The
 
 In MetaGA4TSP, p is predefined to be 0.2. This number was chosen based on past experience with Rank Selection and TSP. If this work is ever extended it may be beneficial to include the possibility of adapting the value for p by either adding a gene to the meta-GA chromosome or adding alleles to the selection gene which represent rank selections using various values for p.
 
-## 3.1.4.3 Tournament-5 selection (T5S)
+##### 3.1.4.3 Tournament-5 selection (T5S)
 
 In tournament selection, a group of individuals is chosen from the population at random, and the fittest individual from that group is chosen as the parent. The size of the group may vary of course, especially with population size. In the current implementation of MetaGA4TSP the only tournament selection implemented uses a group size of five. Members of the old population are repeatedly selected with replacement and recombined until the new population has been completely generated.
 As with rank selection probability, one could conceivably extend the MetaGA4TSP implementation to test the performance of tournament selection methods with varying group sizes.
 
-## 3.1.4.4 Replacement schemes (S1R, S2R, H1R)
+##### 3.1.4.4 Replacement schemes (S1R, S2R, H1R)
 
 Currently, three replacement schemes are implemented. They have been named ‘Simple Single-Offspring Replacement’ (S1R), ‘Simple Double-Offspring Replacement’ (S2R), and ‘Heuristic Single-Offspring Replacement’ (H1R).
 
@@ -523,13 +527,13 @@ If the crossover rate is not met, the child is copied over directly from the old
 
 Once all members of the next generation have been produced, they replace the old population, and the process begins once again with fitness calculation of the population.
 
-## 3.2 The MetaGA4TSP system
+### 3.2 The MetaGA4TSP system
 
 At the top level of evolution is the meta-GA, which can be conceptualized as a simple GA whose individual's genomes consist of sets of parameters for another GA. In order to calculate the fitness for the meta-GA's individuals, that other GA must be evolved to a certain point (preferably to convergence). Some would say that this system is technically not really a meta-GA, since the population of MetaGA4TSP does not actually consist of other GAs but parameters for other GAs. But since a complete GA is run for each meta-GA individual, this can at least be considered a form of meta-GA.
 
 Note: In MetaGA4TSP, generation gap (% of population replaced each generation) is specified by the crossover rate (after elitism rate), since if xover rate is not met for an individual in the old population, that individual is copied to the new population instead of selecting parents and generating offspring by crossover. This system is somewhat different from that found in other literature, and in retrospect the replacement scheme should not have been implemented in such a manner.
 
-## 3.2.1 Meta-evolution
+#### 3.2.1 Meta-evolution
 
 Meta-evolution was kept fairly simple. Figure 15 gives some high-level pseudo-code for the genetic algorithm implemented in the java classes Main, Population, and Chromosome in package abramsJPaul.metaGA4tsp.
 
@@ -547,7 +551,7 @@ User-specified parameters: popsize, tspfile, eliterate, mutrate, xrate, numgener
 
 **Figure 15:** High-level pseudocode for the genetic algorithm implemented in java package abramsJPaul.metaGA4tsp.
 
-## 3.2.2 The meta-GA chromosome
+#### 3.2.2 The meta-GA chromosome
 
 The meta-GA chromosome is used to specify which set of parameters is used for a TSP GA. Each of its genes encodes the value for a specific parameter in integer form. The chromosome chosen is fairly small, it consists of only seven genes which take on integer values, and is shown in Figure 16.
 
@@ -566,7 +570,7 @@ It is important to note that the implementation of the meta-GA chromosome is som
 
 The size of the chromosome is significant: it is quite small. If one ignores the rate-specifying genes, there are only 300 different combinations of the four operator-encoding genes in this implementation. Combined with the fact that many of these operators are similar in their ability to produce good TSP GA results, the chances of randomly finding a good chromosome are fairly high. This interferes somewhat with analysis. Even if the rate-specifying genes are taken into account, this still makes only 300 million unique chromosomes, a great many of which are extremely similar.
 
-**3.2.2.1 Meta-GA chromosome fitness**
+##### 3.2.2.1 Meta-GA chromosome fitness
 A chromosome’s fitness is a percentage as the ratio of the best distance found to the optimal known distance for that TSP instance. If the optimal is found, the fitness is 100 + a ratio of the maximum number of generations allowed to the number taken. This latter ratio is taken as a percentage of 10, so the highest fitness is 110, which is only possible to achieve if the optimum tour is randomly generated in the initial population (one chance in n factorial or so). Java-style pseudocode for the setFitness method in class metaGA4tsp.Chromosome is shown below.
 
 ```java
@@ -586,15 +590,15 @@ public double setFitness(double distance, double known_optimum,
 
 If the known optimum for the desired TSP instance is unknown, it can be set to an impossibly low number and the meta-GA will evolve correctly, although the numbers output for chromosome fitness will be meaningless except when compared to each other.
 
-## 3.2.2.2 Meta-GA crossover
+##### 3.2.2.2 Meta-GA crossover
 
 Crossover is performed to produce an individual in the next generation of the meta-population if a randomly generated number for that individual exceeds a user-specified crossover rate. Crossover is performed by selecting a single locus, forming two genetic subsections of each parent around that locus, and swapping the two subsections. Only one of the two produced children is used in the next generation, however. The child used is decided by flipping a virtual coin.
 
-## 3.2.2.2 Meta-GA mutation
+##### 3.2.2.2 Meta-GA mutation
 
 Mutation is performed on an individual in the population if a randomly generated number for that individual exceeds a user-specified mutation rate. When an individual is selected for mutation, one of its genes is selected at random, and that gene is assigned a random allele among the alleles appropriate for the selected gene.
 
-## 3.3 The TSP GA
+### 3.3 The TSP GA
 
 As discussed in section 3.2, an evolutionary run of a TSP GA is conducted for each individual in each generation of meta-evolution. This section briefly describes the implementation of that TSP GA.
 
@@ -611,11 +615,11 @@ Population size for TSP GA set at `2 * numCities`.
 
 Note there are about 600,000 to 1.4 million TSP fitness evaluations per generation.
 
-## 4.1 Test plan
+### 4.1 Test plan
 
 Obviously, there are a hugely infinite number of choices for a test plan on this system. Thus, the choice of test plans is necessarily arbitrary in the specific sense, although somewhat less arbitrary in the general sense since many extremes can be ruled out.
 
-## 4.1.1 TSP test instances
+#### 4.1.1 TSP test instances
 
 Two 52-city problems were chosen as the main test instances. The first is berlin52 from TSPLIB (Reinelt, 2000) and the second is called dbl\_circ\_52 and was created specifically as a comparison instance for berlin52. An example of a tour for each 52-city problem is displayed graphically in Figure 18.
 
@@ -632,7 +636,7 @@ It was decided to test a larger TSP instance at least to some extent. ‘ch150�
 ![8d2e4a2478d79612f4856a19010743a2.png](:/2834a037912f4628ac4752915062e752)
 **Figure 19:** Graphical output for the best tour found in the 2nd generation of meta-evolution during a MetaGA4TSP session using the TSP instance ch150.tsp.
 
-## 4.1.2 Test parameters
+#### 4.1.2 Test parameters
 
 The main parameters whose values are in question when performing a particular test are the following, with a short form given for each to refer to the specified variable (parameter):
 • Population size of meta-GA (popSize)
@@ -646,7 +650,7 @@ The main parameters whose values are in question when performing a particular te
 
 There are many other parameters which could be varied in a given test. One possibility which was explored briefly{13} was the number of alleles considered for each gene, or the number of different operator types considered. In any case, only the listed parameters are varied in the testing phase. Population size for the TSP GA was set at two times the number of cities in the TSP instance, an accepted quantity (obtained empirically) for TSP population size in much of the literature.
 
-## 4.1.3 Test runs
+#### 4.1.3 Test runs
 
 Determining a test plan was fairly difficult due to the long running time of the tests, since performing some preliminary testing is necessary to get a sense of what the final test plan will be. One mistake made was using too low a population size. It was earlier considered that twelve was a large enough meta-population, but as shall be seen in test 7 this is not the case.
 
@@ -688,11 +692,11 @@ The seventh test is identical to the sixth but is performed with a population si
 The eighth test uses the instance berlin52 once again, identical to test 2 except that far fewer TSP generations are allowed per meta-chromosome.
 `popSize: 12, numGens: 12, maxTSPGens: 100`
 
-## 4.2 Results
+### 4.2 Results
 
 Results are presented in two main stages. The first stage presents results which provide evidence that MetaGA4TSP is evolving parameter sets which result in better TSP GAs. The second stage presents results of each test in a manner that allows identification of ‘good’ parameters and combinations of parameters. Full output for each test is contained in files of type ‘.out’ (which can be viewed using a text editor) on the CD-ROM accompanying this submission in the ‘testing’ sub-directory. Generational results for tests 1-5 are tabulated in Appendix A.
 
-## 4.2.1 Average and best fitnesses of meta-GA chromosomes by generation
+#### 4.2.1 Average and best fitnesses of meta-GA chromosomes by generation
 
 In order to show that MetaGA4TSP is evolving better parameter sets for TSP GA than are initially obtained by random selection, the following graphs have been compiled using output from tests 1-5 and inputting generational information for average and best fitnesses found into a spreadsheet program (Micrsosoft Excel). Fitness is measured in terms of percentage as described in Chapter 3.2.2.1. The fitness scale (y-axis) is sometimes 0-100%, sometimes 0-120% and sometimes shorter ranges for example 84-102 %. Since the first 5 tests all run for either 12 or 20 generations, the x-axis ranges accordingly from 1-12 or 1-20. The data from which these graphics were compiled are shown in tabular format in Appendix A.
 
@@ -725,11 +729,11 @@ In order to show that MetaGA4TSP is evolving better parameter sets for TSP GA th
 ![131a36d4892de3dc2b96aa8f6a0069b2.png](:/e76d29c0bb23426b8899e8b08602b637)
 **Figure 24:** Average and best fitnesses for the single iteration of test 5.
 
-## 4.2.2 Best meta-GA chromosomes found in each iteration of each test.
+#### 4.2.2 Best meta-GA chromosomes found in each iteration of each test.
 
 What follows is a listing of a single chromosome found for each iteration of each test. These were copied from the output files which are available in the ‘testing’ folder on the CD-ROM submitted with this document. In all cases, the chromosome shown is the one with the best fitness from the final generation of evolution. Each heading indicating the test number is followed by a list of four of the variables described in Chapter 4.1.2. This is provided as a memory aid for which test is being discussed, since each of the test runs varies only in those four parameters. After the parameter specification, a table showing each of the chromosomes found for all iterations of the particular test is shown, followed by a short discussion giving a sort of informal analysis of those results including some comparison with results of other tests.
 
-## Test 1
+##### Test 1
 
 (tspFile: dbl\_circ\_52, popSize: 12, numGens: 12, maxTSPGens: 500)
 Table 1 shows the results for test 1.
@@ -745,7 +749,7 @@ Table 1: Best chromosome found in the final generation of each iteration of test
 
 H1R ISM ERX is found twice with different mutation rates. SIM occurs twice, but not with the popular ERX. Elitism rates are between 0.1 and 0.3, mutation rates are generally high, as are crossover rates.
 
-## Test 2
+##### Test 2
 
 (tspFile: berlin52, popSize: 12, numGens: 12, maxTSPGens: 500)
 Table 2 shows the results for test 2.
@@ -760,7 +764,7 @@ Table 2: Best chromosome found in the final generation of each iteration of test
 
 H1R performs well as in Test 1. SIM and DM are the most common mutaters, MPX and CX the most common recombiners, and RS dominates the selection methods except for a single T5S. In comparing the first two tests, the first obvious difference is the prevalence of ERX in the double circle instance, with not one occurrence of ERX in the chromosomes found in berlin52 testing.
 
-## Test 3
+##### Test 3
 
 (tspFile: dbl\_circ\_52, popSize: 20, numGens: 20, maxTSPGens: 1000)
 Table 3: Best chromosome found in the final generation of each iteration of test 3.
@@ -771,7 +775,7 @@ Table 3: Best chromosome found in the final generation of each iteration of test
 |  			3 		     |  			[[H1R E0.22 SIM 0.28 PMX 0.97 			RS]] 		        |  			107.4 		     |
 H1R and RS continue to perform better than their alternatives. SIM is a popular mutation type.
 
-## Test 4
+##### Test 4
 
 (tspFile: berlin52, popSize: 20, numGens: 20, maxTSPGens: 1000)
 Table 4: Best chromosome found in the final generation of each iteration of test 4.
@@ -783,14 +787,14 @@ Table 4: Best chromosome found in the final generation of each iteration of test
 
 The most obvious thing to observe here is the good performance of T5S. Previously, RS had completely dominated all evolution, but T5S seems to make its way into the population when evolving berlin52 GAs.
 
-## Test 5
+##### Test 5
 
 (tspFile: ch150, popSize: 20, numGens: 12, maxTSPGens: 2000)
 Since there was only one iteration of test 5, here is the best chromosome found in the final generation:
 `\[\[H1R E0.05 SIM 0.4 PMX 0.95 RS\]\] &lt;93.02081&gt;`
 
 
-## Test 6
+##### Test 6
 
 (tspFile: circle32, popSize: 12, numGens: 12, maxTSPGens: 100)
 **Table 5:** Best chromosome found in the final generation of each iteration of test 6.
@@ -827,7 +831,7 @@ The frequencies of the alleles for the replacement, mutation, crossover and sele
 
 Note that all 5 mutation types appear in the 10 iterations, and that the only missing crossover type is MPX. Crossover rates are high. The single IVM also had the only low mutation rate.
 
-## Test 7
+##### Test 7
 
 (tspFile: circle32, popSize: 32, numGens: 12, maxTSPGens: 100)
 Table 6: Best chromosome found in the final generation of each iteration of test 7.
@@ -862,7 +866,7 @@ The frequencies of the alleles for the replacement, mutation, crossover and sele
 
 Test 7 comes up with similar results as test 6, except they are more pronounced. ISM seems to perform better with the increased population size.
 
-## Test 8
+##### Test 8
 
 (tspFile: berlin52, popSize: 12, numGens: 12, maxTSPGens: 100)
 Table 7: Best chromosome found in the final generation of each iteration of test 8.
@@ -903,7 +907,7 @@ The most successful crossover operator, at least on TSP GAs running for a small 
 The most dominated gene in the meta-GA chromosome by far was the last gene, corresponding to the selection method. As can easily be seen from test output, it quickly converges to RS in almost all cases. The only exceptions are tests 2 and 4, corresponding to berlin52 GAs running for 500 and 1000 generations each, respectively. It seems interesting that it is only these two tests that exhibit good results with T5S, and since nothing similar was observed in the circle-shaped TSP instances, these results suggest some correlation between selection method and city layout.
 As far as determining which combinations of parameters were the best, there was insufficient testing to achieve conclusive results.
 
-## 5.1 Problems encountered and potential solutions
+### 5.1 Problems encountered and potential solutions
 
 It almost goes without saying that in performing a work of this magnitude for the first time, countless mistakes are made and therefore countless lessons are learned. One of the biggest problems involved trying to avoid re-doing work that has already been done. Unfortunately, research was not conducted in a sufficiently professional manner, nor was the goal chosen with sufficient insight, to avoid this pitfall. One lesson in particular that will be remembered is that online sources which have not been officially published are sometimes unreliable. Misleading literature affected progress negatively on more than one occasion, especially with frequently misunderstood concepts such as coevolution.
 
@@ -911,7 +915,7 @@ A specific problem inherent with the system seems to be related to the fact that
 
 Another lesson learned was that the testing phase in a work of this type demands attentive consideration. Testing was neglected in this work (partly due to late changes in the implementation){14}, and the utility of the results suffered as a consequence.
 
-## 5.2 Opportunity for future work
+### 5.2 Opportunity for future work
 
 While the meta-GA implemented here is rudimentary, given more time it is fairly certain that the system could be enhanced on more than one level with additional parameters and operators in order to enhance performance.
 For example, one serious limitation is that the same parameters allow only one type of operation throughout evolution of the TSP GA. It has been shown in other work that best results are achieved by following one strategy until convergence, and then switching strategies. It would not be difficult to extend the meta-GA chromosome to follow two different strategies, and then allow evolution to find a good combination. There is also the possibility of making the chromosome as large as the number of operators and parameters used, and allowing each allele to specify a probability of application for that gene.
@@ -1667,7 +1671,7 @@ The MetaGA4TSP system is implemented as a java application. As of this writing i
 
 This appendix is provided as a summary for the java source implemented for anyone wishing to understand and/or modify the code.
 
-**Java classes**
+### Java classes
 A short description of each of the classes in abramsJPaul.metaGA4tsp15 is now given:
 • Class Main contains the meta-evolutionary loop which operates on a Population object. It also contains the complete menu system and most output methods for the system.
 • Class Demo contains all demonstration routines accessible from the menu system. There is a great deal of duplication of code in this class.
@@ -1685,7 +1689,7 @@ While the source code is commented in places, it is not designed to be highly re
 
 The root directory of the CD-ROM contains various batch files used to run MetaGA4TSP, as well as various TSP files used with the system. It also contains a copy of this document in Microsoft Word format, and a java installation (J2SDK 1.4.1) in case your machine does not have java installed. The java source (as described in Appendix B) and class files are both stored in the subdirectory \\abramsJPaul\\metaGA4tsp. Output and log files for each test are included under the \\testing subdirectory. The log files do not contain any information not included in the output files, but were implemented only to be spreadsheet-friendly (they were never actually used to analyze data). For tests for which graphs were compiled (see for example Figure 20), the Microsoft Excel files (.xls) are also included.
 
-**Installation**
+### Installation
 The system is tested only on Windows 95 and Windows XP systems using the java SDK v1.4.1rom java.sun.com. Since it is developed in java, the system should work on other platforms as well, but only Windows installation instructions are provided here.
 
 If your machine does not have java installed, install it by double-clicking the j2sdk-1.4.1 icon. After installation, make sure that the \\bin directory in the java installation directory is included in your path (check under Control Panel, System, Advanced, Environment Variables, or alternatively using the path and set path statements from the command prompt). For example, if java is installed in c:\\java, your path environment variable should contain c:\\java\\bin.
@@ -1694,7 +1698,7 @@ Once java is installed, one can install MetaGA4TSP by designating a new director
 
 If there are any problems with the CD-ROM, .bat, .tsp and .java files only are included on 1.4” diskette. If installing from this medium, copy all disk contents to some installation directory as above (ensuring that .java files reside in the abramsJPaul\\metaGA4tsp directory), and then compile the java files by running compile.bat from the command prompt in the installation directory. One may then proceed to execution.
 
-**Execution**
+### Execution
 Execution of MetaGA4TSP is performed from the command prompt. The easiest way is to run one of the batch files. The file menu.bat is provided as a quick demonstration and can be run from the command prompt in the MetaGA4TSP installation directory. Running it will start the menu user interface with certain default parameters and open another window which will display some graphical information. The menu system is meant to be self-explanatory, but is extremely unforgiving when accepting input, so care is needed to avoid re-starting the program because of input errors. One can begin evolution immediately with default parameters, change parameters, or view demonstrations of various MetaGA4TSP components including a TSP GA which evolves with user-specified parameters. The menu system is constructed so that only one meta-GA evolutionary run is possible per ‘session’. This is because each evolutionary run outputs generational information (the population of the meta-GA at each generation) to the file metaGA4TSP.log in a spreadsheet-readable format for later examination. Once one has evolved a meta-GA, the program must be re-started in order to evolve another meta-GA with different parameters. However, an opportunity is given (provided the menu system is turned on) after meta-evolution to test the evolved parameter set on a TSP GA for a greater number of generations than were allowed during meta-evolution in order to test whether the optimal is found, but currently this only works on the same TSP instance as was used during meta-evolution. However, one could simply restart the system and run a demonstration of TSP GA on the TSP of their choice using the previously evolved chromosome (which can be found in the last line of metaGA4TSP.log).
 
 The menu system may be avoided completely by specifying all necessary parameters from the command line, omitting the –m parameter. Command line parameters can be viewed by calling the MetaGA4TSP program without parameters. This can be done by entering `java abramsJPaul.metaGA4tsp.Main`{16} at the command prompt in the MetaGA4TSP installation directory. A list of parameters will be given (see Figure 25), and
@@ -1824,7 +1828,6 @@ The vast majority of information concerning evolution is directed to standard ou
 12.     In the diagram of figure 19, the tab for generation ‘1’ is selected, but this is actually the second generation since generation ‘0’ is the first generation.
 13.     There is some functionality included to reduce the number of alleles considered for the meta-GA chromosome.  For example, if desired, one could limit the number of crossover alleles to one and evolve the chromosome in an attempt to find the best combination of parameters for the desired crossover type.  This functionality, however, remains for the most part un-tested. 
 14.     During preliminary testing, the crossover method for the meta-GA chromosome was implemented using an algorithm that assigned new values to rate-specifying genes by taking random numbers in a range specified by the alleles in the corresponding parent genes.  This method was changed to the current simple single-point crossover method described in Chapter 3  immediately prior to final testing.  After observing preliminary results it was considered desirable to observe chromosomes in which all genes had converged; the averaging crossover was preventing convergence of the rate-specifying genes.
-15.     empty
 16.     Capitalization is very important when executing java applications.  Note in particular the lower-case TSP.
 17.     Note that most included batch files do not use all parameters but instead rely on default values for parameters such as mutation rate (default 0.35) and crossover rate (default 0.85).
 18.     Currently, TSPLIB files are not directly supported.  However, any TSPLIB file specifying 2D co-ordinates can be quickly modified so that MetaGA4TSP can read it.  To convert a TSPLIB file, comment out all header information (using double-slash or slash-star style comments), and add a line to the beginning containing only an integer value specifying the number of cities.  The remaining node co-ordinate information can remain intact.  It should consist of space-separated integer values for city_number (1..n), x co-ordinate and y co-ordinate for each city.
