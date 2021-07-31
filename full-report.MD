@@ -288,6 +288,7 @@ The path representation simply lists the cities in the order they are visited, s
 This means that if the starting city is not fixed at a certain spot, there will be a large number of path representations generated whose tours are duplicates of other tours. For example, in a TSP of n=5, the permutations 12345, 23451, 34512, 45123 and 51234 all represent the same tour. It also represents twice more tours than required by traversing the path in a different direction, eg the tours 12345 and 15432 give the same distance and graphical representation and start at the same city, but have different path representations. Despite these problems, it was decided the path representation would be used in every TSP GA involved in the meta-GA. Making the representation used adaptable was briefly considered, but it was rejected in light of probable implementation difficulties as well as the fact that most of the other operators are designed for one particular representation.
 
 ![418e5c2e5fc49766e8fa495f7e5bcb1d.png](/b4c7759973a74c4fa09be15604c05bc1?raw=true)
+
 **Figure 1**: All twelve unique tours on a TSP of size n=5 in graphical and path representations.
 
 These considerations give us a value (n-1)!/2 for the number of unique tours on a TSP of size n. As an example, Figure 1 gives all unique tours for a TSP of size 5 in graphical form with one of the corresponding path representations. Although the pairs of mirror image tours (eg 12534 and 13425) appear to have the same distance, this is only a consequence of the chosen city pattern (pentagon-shaped) being symmetrical around the y-axis.
@@ -341,11 +342,13 @@ One wants to reward fit individuals when selecting the surviving members of the 
 Crossover is also known as recombination, or mating. It is a simulation of the sexual reproductive process which provides genetic inheritance. A great number of different crossover operators have been developed for various purposes. One of the first and simplest is the simple single-point crossover, where a crossover point is chosen at random, and the two parent chromosomes exchange information after that point (see Figure 3).
 
 ![8209e426ed5b7afdf7828b1be948cdc2.png](/99cbb5954bbd4cb6a2d4cfbb9f73a0a8?raw=true)
+
 **Figure 3:** Demonstration of a simple single-point crossover on arbitrary chromosomes of length 6 with crossover point 2.
 
 Crossover is applied after, or sometimes during, selection, and with a certain probability defined as the crossover rate.
 Mutation is intended to simulate random genetic mutation in nature, but tends to be used more frequently in GAs than in nature in order to encourage population diversity and prevent premature convergence. If one thinks of crossover as a binary genetic operator (acting on two parents), mutation can be thought of as a unary genetic operator. As with crossover, a mutation rate is defined to control how often mutation is applied. In some GAs, probability of mutation is implemented on a per-gene basis. A mutation rate of 0.01 (1%) would mean each gene has a one percent chance of being mutated. In all GAs implemented as part of this work, however, probability of mutation applies to each chromosome. A 0.01 mutation rate would mean each chromosome has a 1% chance of being mutated. A chromosome selected for mutation would then have one of its genes selected at random and given a new random state.
 ![4e78ab5abb87f7f18740dfa4c0df8aa9.png](/6c695eab1f744ca2aab893cfb7b8736a)
+
 **Figure 4:** Classic mutation at locus 1 on an arbitrary 8-bit chromosome.
 
 Many different crossover and mutation operators have been implemented as required for different problems which use particular chromosome representations. We shall see several examples of this with the path representation for the TSP when the implementation is discussed in Chapter3.
@@ -420,6 +423,7 @@ Due to the popularity of the TSP and path representation as test beds for evolut
 Exchange mutation \[Banzhaf, 1990\] solves the problem of generation of illegal tours by simply exchanging two of the cities in a tour, which always transforms a legal tour to another legal tour. Two unequal loci are chosen at random, and the cities at those indices of the chromosome are exchanged. Two examples are shown in Figure 5.
 
 ![fab6053b9df525b412d08b669b545ee2.png](/97caad20cd4048d5bb9f92ec9e5be880)
+
 **Figure 5:** Output from two random demonstrations of exchange mutation on tours of size 6 from the MetaGA4TSP implementation.
 
 ##### 3.1.1.2 Insertion mutation (ISM)
@@ -427,6 +431,7 @@ Exchange mutation \[Banzhaf, 1990\] solves the problem of generation of illegal 
 Insertion mutation selects a city at random and replaces it in a new random spot in the chromosome. In MetaGA4TSP, the insertion spot is taken to be the larger index for simplicity. When the city is inserted in its new spot, the cities are shifted by one position each until the vacated spot is filled.
 
 ![0c02b621e46b0657c39376f940690551.png](/82c41f88bb234265bf003b1bd63a5cf1)
+
 **Figure 6:** Output from two random demonstrations of insertion mutation from the MetaGA4TSP implementation on tours of size 6.
 
 ##### 3.1.1.3 Simple inversion mutation (SIM)
@@ -434,6 +439,7 @@ Insertion mutation selects a city at random and replaces it in a new random spot
 SIM acts on a substring of the tour rather than on one or two genes. It picks two loci on the chromosome at random, and reverses the order of the cities between those points. Examples are shown in Figure 7. This implementation enforces a substring length of three or more.
 
 ![f6d972b7b4ad3191070fa632a566fdb3.png](/163da753bcc540098c590a9da51b32ea)
+
 **Figure 7:** Output from two random demonstrations of simple inversion mutation from the MetaGA4TSP implementation on tours of size 6.
 
 ##### 3.1.1.4 Displacement mutation (DM)
@@ -441,12 +447,14 @@ SIM acts on a substring of the tour rather than on one or two genes. It picks tw
 This mutation operator picks a substring of the tour at random as with SIM, but instead of inverting the substring, it displaces it intact to a new locus. As with SIM, the substring length must be between 3 and n-1. Figure 8 gives two examples.
 
 ![5e64e7366d5f017b1fd7046f42ae34a0.png](/a504bed618ff484c9c4fbf803238d2a4)
+
 **Figure 8:** Output from two random demonstrations of displacement mutation from the MetaGA4TSP implementation on tours of size 6.
 
 ##### 3.1.1.5 Inversion mutation (IVM)
 
 IVM can be thought of as a combination of SIM and DM on the same substring of the tour. A random substring is chosen and inverted, and the inverted substring is replaced at a random locus of the chromosome. Two simple examples are given in Figure 9.
 ![db9c7e26a46ff76cfad745794dfa9869.png](/57f9024b653f457280ec125f65484251)
+
 **Figure 9:** Output from two random demonstrations of inversion mutation from the MetaGA4TSP implementation on tours of size 6.
 
 #### 3.1.2 Crossover operators on path representation
@@ -458,6 +466,7 @@ In the next sections, the crossover operators implemented in MetaGA4TSP are desc
 According to Larrañaga et al (1999, pp.11), the PMX operator was first suggested by Goldberg and Lingle (1985). Like many of the crossover operators presented here, PMX starts by randomly choosing two points and exchanging the two parents' information between those loci. The remaining genes in the child are filled with the corresponding cities from the original tour (starting from the beginning of the tour) unless they are already present in the child. In such a case, the city to be placed at that locus is specified by the mappings formed by the selected substrings in the parent. In the 6-city example of Figure 10(a), for example, the mappings are 4&lt;-&gt;0, 0&lt;-&gt;2, and 5&lt;-&gt;3.
 
 ![dd627b5b3edc7751d2d7b9e1711513db.png](/ee96b87710e048d9acff7894f105e68f)
+
 **Figure 10:** Partially-Mapped crossover as performed by the MetaGA4TSP demonstration on randomly generated parents on a) tours of size 6 and b) tours of size 12.
 
 For the first child, the parent1 substring 405 is copied into the child at the same locus. Then the algorithm attempts to fill the remaining genes using alleles from corresponding (at the same locus) genes in parent 2. Since the 5 at position 3 of parent 2 is already present in the child, the mapping 5&lt;-&gt;3 is used. In the next spot there is a 4 which is also already present in the child so the mapping 4&lt;-&gt;0 is used. However, 0 is already present as well so the mapping 0&lt;-&gt;2 is used and a gene is finally found which is not already present in the new child so it is placed at position 4 of the child. The last allele in parent2, a 1, happens to also be the only remaining allele not yet present in the child, and so it is copied over.
@@ -469,6 +478,7 @@ A second child is found in exactly the same manner as in the above paragraph exc
 Again according to Larrañaga et al (1999, pp.13), the cycle crossover operator was proposed by Oliver et al. (1987). It is distinguished mainly by its lack of crossover points, and is only suitable for single-child reproduction. Cycle crossover attempts to create an offspring, each of whose genes contain the same alleles as one of the parents' two genes at the corresponding position. An excellent description of cycle crossover is given in Larrañaga et al (1999, pp.13,14), but a basic description and example of the algorithm are also given here.
 
 ![0e599393b3623aa2ef349eaff1082c04.png](/c32651f9e7c9402db92f6611b5493436)
+
 **Figure 11:** Cycle crossover as performed by the MetaGA4TSP demonstration program on randomly generated parent tours of size 6.
 
 The algorithm starts at the beginning of the chromosome and picks one of the parents at random from which to copy the first allele. In this example let us only discuss the first child in Figure 11 (3 1 5 2 4 0). For the first child allele, a coin was tossed and parent1 was the winner, so the 3 was copied to the child. Now the algorithm finds the position of the 3 in parent 2, which it finds at locus 1. Since the 3 is already used in the child, the algorithm copies the 1 from the corresponding spot in parent1 over to the child. Now of course, since the 1 is used the algorithm finds the 1 at the last locus of parent2 and copies the 0 over from parent1. The algorithm continues in this manner until all the child genes are filled. If it comes to a point where there is a choice between the two parents, it proceeds as with the first gene, by flipping a coin.
@@ -478,6 +488,7 @@ The algorithm starts at the beginning of the chromosome and picks one of the par
 Larrañaga et al (1999, pp.15) credits the OX operator to Davis (1985). Like PMX, the algorithm starts by copying a substring of random length between 3 and n-1 inclusive from one of the parents to the child. Then the genes of the other parent are copied to the child (starting at the endpoint of the copied substring) in the same order in which they appear. If a gene is already present, it is simply skipped. For some reason, probably because the ordering property of the chromosome is somewhat preserved from both parents, this operator is very successful with the TSP. With small problem sizes (n=50 or fewer cities) it has dominated all preliminary MetaGA4TSP test evolutions. Examples are given in Figure 12.
 
 ![534bcb19d28990e6d4dccd3ffd683b6e.png](/a3bb2d430504410bb82b014e89bd44c6)
+
 **Figure 12:** Output from the MetaGA4TSP Order crossover demonstration routine on randomly generated parents of a) size 6 and b) size 12.
 
 ##### 3.1.2.4 Edge recombination crossover (ERX)
@@ -485,6 +496,7 @@ Larrañaga et al (1999, pp.15) credits the OX operator to Davis (1985). Like PMX
 Edge Recombination is attributed to Whitley et al. (1989) according to Larrañaga et al (1999, pp.18). It differs from most other recombination operators included with MetaGA4TSP because it focuses on conserving the edge information from the two parents. This is done by constructing an edge list for each city. An edge list for a graph lists all adjacent nodes for each node. With two parents, the edge lists for each parent are combined. In path representation, this is fairly easy since all incident edges to a city can be found by recording each city that is adjacent to that city in the path representation. With two parents, a city may have a minimum of two and a maximum of four edges in its edge list. Let us look at the edge list for city 0 in the example provided in Figure 13. In the first parent, it is easy to see that cities 2 and 5 are connected via edges to city 0, thus 2 and 5 are added to city 0's edge list. In the second parent, cities 2 and 10 are connected directly to city 0, but the edge 0-2 already exists in the edge list, so only the edge 0-10 is added. This simple process is repeated for each city. Of course, cities at the beginning or end of the path representation are adjacent to the city at the other extreme of the list, so in the example edge (3, 9) exists in parent 1 and edge (4, 2) exists in parent2. ****strong text****
 
 ![504bf1b5c3bc80b0f65e3b8a31746572.png](/2bc934c34f4248bc9f3fcbae667accba)
+
 **Figure 13:** Output from the MetaGA4TSP Order crossover demonstration routine on randomly generated parents of size 12.
 Once the edge list has been built, the ERX algorithm builds a child tour by proceeding as follows. The first gene to be copied over is chosen by taking the shortest edge list. Ties are either broken randomly, or in the case of the ERX implemented in MetaGA4TSP the first such city encountered is chosen. In Figure 13 cities 0 and 2 both tie for the shortest edge list so 0 is chosen as the first city in the offspring. Whenever a city is chosen, all of its occurrences are removed from the right hand side of the edge list. For the next city, we want to choose the edge incident to the previous city whose other end itself has the shortest edge list. Since the previous city is 0, we see that our candidates for the next city are 2, 5 and 10. City 2 has the shortest edge list, so it is chosen to occupy locus #1 in the child. Computation proceeds in this manner until all the cities have been used. City 2 is connected to cities 1, 0 and 4 but 0 has already been used (and removed from city 2's edge list). The only remaining cities incident to city 2 are cities 1 and 4 which have equivalent edge list sizes so city 1 is chosen to break the tie.
 If this method of choosing the shortest edge list at each iteration was not used, there would be foreign edges introduced in the offspring. With this method, the only foreign edge which can be introduced is between the last and first cities. Larrañaga et al (1999, pp.18) offers a more thorough description and analysis of ERX.
@@ -494,6 +506,7 @@ If this method of choosing the shortest edge list at each iteration was not used
 The MPX operator used here is a slight variation of the one introduced by Muhlenbein et al. (1988). It works the same as OX, except that the chosen substring is always copied to the beginning of the child chromosome. Our version differs from the version of Muhlenbein et al. (1988) in that instead of using a range of \[10..(n/2)\] for the randomized substring length we have used the range \[3..(n-1)\]. This may cause poorer results at large problem sizes, but should have little effect with n at fifty or less.
 
 ![4df999297647bb6c0f5613683adc3afe.png](/8e9b33227a7646168923aaa1aab4c333)
+
 **Figure 14:** Output from the MetaGA4TSP maximal-preservative crossover demonstration routine on randomly generated parents of size 12.
 
 It is easy to see from the example that the chosen substring from the first parent is copied to the front of the child chromosome, and the remaining genes are filled with alleles in the same order in which they occur in the second parent.
@@ -642,6 +655,7 @@ There are methods which can currently solve berlin52 in less than one second of 
 It was decided to test a larger TSP instance at least to some extent. ‘ch150’ was chosen from TSPLIB, somewhat arbitrarily. It took several days to run a test with the desired parameters on a Pentium™ laptop. **Figure 19** shows the best tour found by MetaGA4TSP in the second12 generation of evolution.
 
 ![8d2e4a2478d79612f4856a19010743a2.png](/2834a037912f4628ac4752915062e752)
+
 **Figure 19:** Graphical output for the best tour found in the 2nd generation of meta-evolution during a MetaGA4TSP session using the TSP instance ch150.tsp.
 
 #### 4.1.2 Test parameters
@@ -735,6 +749,7 @@ In order to show that MetaGA4TSP is evolving better parameter sets for TSP GA th
 **Figure 23:** (a) Average and (b) best fitnesses for each generation of each of three iterations of test 4. The fitness scale for (a) ranges from 0 to 100 percent while the fitness scale for (b) ranges from 84 to 102 percent.
 
 ![131a36d4892de3dc2b96aa8f6a0069b2.png](/e76d29c0bb23426b8899e8b08602b637)
+
 **Figure 24:** Average and best fitnesses for the single iteration of test 5.
 
 #### 4.2.2 Best meta-GA chromosomes found in each iteration of each test.
