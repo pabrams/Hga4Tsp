@@ -2,8 +2,11 @@
  by
  
  J. Paul Abrams
+ 
  Winter 2003 (converted to markdown 2021-07-30)
+ 
  Carleton University
+ 
  School of Computer Science
  
  Supervisor: Dr. Franz Oppacher
