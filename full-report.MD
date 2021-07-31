@@ -1,12 +1,20 @@
 # A Hierarchical Genetic Algorithm for the Travelling Salesman Problem
  by
+ 
  J. Paul Abrams
+ 
  Student No. 214937
+ 
  95.495 Honours Project
+ 
  Winter 2003
+ 
  Carleton University
+ 
  School of Computer Science
+ 
  Supervisor: Dr. Franz Oppacher
+ 
 
 * * *
 
@@ -144,11 +152,11 @@ Results show definite preferences for rank selection and heuristic replacement o
 
 **Figure 16:** The MetaGA4TSP chromosome. 40
 
-**Figure 17:** Simplified java code for the method abramsJPaul.metaGA4tsp.Chromosome.setFitness(double distance, int gens) 42
+**Figure 17:** Simplified java code for the method `abramsJPaul.metaGA4tsp.Chromosome.setFitness(double distance, int gens)` 42
 
-**Figure 18:** Graphical output from abramsJPaul.metaGA4tsp.Demo.tsp() for (a) a local optimum for berlin52 and (b) one of eight (graphically unique) optimal tours for dbl\_circ\_52. 44
+**Figure 18:** Graphical output from `abramsJPaul.metaGA4tsp.Demo.tsp()` for (a) a local optimum for berlin52 and (b) one of eight (graphically unique) optimal tours for `dbl\_circ\_52`. 44
 
-**Figure 19:** Graphical output for the best tour found in the 2nd generation of meta-evolution during a MetaGA4TSP session using the TSP instance ch150.tsp. 45
+**Figure 19:** Graphical output for the best tour found in the 2nd generation of meta-evolution during a MetaGA4TSP session using the TSP instance `ch150.tsp`. 45
 
 **Figure 20:** (a) Average and (b) best fitnesses for each generation of each of five iterations of test 1. 49
 
@@ -160,7 +168,7 @@ Results show definite preferences for rank selection and heuristic replacement o
 
 **Figure 24:** Average and best fitnesses for the single iteration of test 5. 51
 
-**Figure 25:** Command line parameters for abramsJPaul.metaGA4tsp.Main. 79
+**Figure 25:** Command line parameters for `abramsJPaul.metaGA4tsp.Main`. 79
 
 ## LIST OF TABLES
 
@@ -494,9 +502,10 @@ It is easy to see from the example that the chosen substring from the first pare
 #### 3.1.4 Methods of selection and replacement
 
 In MetaGA4TSP, a distinction is made between methods of selection of the parents for reproduction and methods of replacing the old population to generate the new one. This distinction is clarified eloquently by Jens Gottlieb and Torben Kruse:
-“The parent selection phase uses the fitness information to select parents for reproduction, while the replacement scheme determines how the next population is formed by the produced children and the old population. Algorithms like \[…\] GENITOR are usually considered as selection algorithms, but in fact they represent combined selection strategies consisting of a specific parent selection method and a specific replacement scheme.” (2000, pp. 415)
+>The parent selection phase uses the fitness information to select parents for reproduction, while the replacement scheme determines how the next population is formed by the produced children and the old population. Algorithms like \[…\] GENITOR are usually considered as selection algorithms, but in fact they represent combined selection strategies consisting of a specific parent selection method and a specific replacement scheme.
+> (2000, pp. 415)
 
-The decision was made to separate these two processes in order to allow the possibility of determining the best combination of techniques for the two phases of selection. This section and its corresponding gene in the meta-GA chromosome deals with methods of selecting the parents from the old population to combine via crossover and/or copying to produce the children which will replace the old population in the manner specified by the replacement scheme. The next few sections describe the selection methods used, followed by the replacement schemes implemented.
+A decision was made to separate these two processes in order to allow the possibility of determining the best combination of techniques for the two phases of selection. This section and its corresponding gene in the meta-GA chromosome deals with methods of selecting the parents from the old population to combine via crossover and/or copying to produce the children which will replace the old population in the manner specified by the replacement scheme. The next few sections describe the selection methods used, followed by the replacement schemes implemented.
 
 ##### 3.1.4.1 Roulette wheel selection (RWS)
 
@@ -553,7 +562,7 @@ User-specified parameters: popsize, tspfile, eliterate, mutrate, xrate, numgener
 
 #### 3.2.2 The meta-GA chromosome
 
-The meta-GA chromosome is used to specify which set of parameters is used for a TSP GA. Each of its genes encodes the value for a specific parameter in integer form. The chromosome chosen is fairly small, it consists of only seven genes which take on integer values, and is shown in Figure 16.
+The meta-GA chromosome is used to specify which set of parameters is used for a TSP GA. Each of its genes encodes the value for a specific parameter in integer form. The chromosome chosen is fairly small; it consists of only seven genes which take on integer values, and is shown in Figure 16.
 
 | Locus | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -905,11 +914,10 @@ The most successful mutation types were SIM and ISM, two very different operator
 The most successful crossover operator, at least on TSP GAs running for a small number of generations, was ERX. It performed the best on tests 1, 6, 7 and 8. In test 2, MPX CX and PMX performed well. Test 3 saw results divided between OX, ERX and PMX, test 4 between PMX and MPX. The single iteration of test 5 (the 150-city problem) found a chromosome containing PMX.
 
 The most dominated gene in the meta-GA chromosome by far was the last gene, corresponding to the selection method. As can easily be seen from test output, it quickly converges to RS in almost all cases. The only exceptions are tests 2 and 4, corresponding to berlin52 GAs running for 500 and 1000 generations each, respectively. It seems interesting that it is only these two tests that exhibit good results with T5S, and since nothing similar was observed in the circle-shaped TSP instances, these results suggest some correlation between selection method and city layout.
-As far as determining which combinations of parameters were the best, there was insufficient testing to achieve conclusive results.
 
 ### 5.1 Problems encountered and potential solutions
 
-It almost goes without saying that in performing a work of this magnitude for the first time, countless mistakes are made and therefore countless lessons are learned. One of the biggest problems involved trying to avoid re-doing work that has already been done. Unfortunately, research was not conducted in a sufficiently professional manner, nor was the goal chosen with sufficient insight, to avoid this pitfall. One lesson in particular that will be remembered is that online sources which have not been officially published are sometimes unreliable. Misleading literature affected progress negatively on more than one occasion, especially with frequently misunderstood concepts such as coevolution.
+It almost goes without saying that in performing a work of this magnitude for the first time, countless mistakes are made and therefore countless lessons are learned. One of the biggest problems involved trying to avoid re-doing work that has already been done. Unfortunately, research was not conducted in a sufficiently professional manner, nor was the goal chosen with sufficient foresight, to avoid this pitfall. One lesson in particular that will be remembered is that online sources which have not been officially published are sometimes unreliable. Misleading literature impeded progress on more than one occasion, e.g. with frequently misunderstood concepts such as coevolution.
 
 A specific problem inherent with the system seems to be related to the fact that the fitness of a particular chromosome varies each time it is calculated, since the random seed used to create the population is not preserved. Thus good chromosomes will sometimes not be found if they get ‘bad luck’. This problem could perhaps be alleviated somewhat, or at least monitored, by maintaining a unique ID for each chromosome and keeping a list of all its calculated fitnesses. Another solution might be to add facilities to preserve and re-use random seeds.
 
