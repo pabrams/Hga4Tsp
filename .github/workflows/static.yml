@@ -30,6 +30,8 @@ jobs:
           node-version: '20'
       - name: Build browser bundle
         run: npm ci && npm run build
+      - name: Include build artifacts in deploy
+        run: sed -i '/src\/metaga4tsp\.js/d' .gitignore
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
