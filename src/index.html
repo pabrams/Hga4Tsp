@@ -273,7 +273,7 @@
 
 <div class="main">
   <div class="chart-panel">
-    <h2>Fitness by Meta-Generation</h2>
+    <h2>Fitness Score by Meta-Generation</h2>
     <div class="legend">
       <span class="best">Best</span>
       <span class="avg">Average</span>
@@ -283,7 +283,7 @@
   <div class="table-panel">
     <div class="gen-tabs" id="genTabs"></div>
     <table class="pop-table"><thead><tr>
-      <th>#</th><th>Rep</th><th>Elit%</th><th>Mut</th><th>Mut%</th><th>Xov</th><th>Xov%</th><th>Sel</th><th>Fit%</th>
+      <th>#</th><th>Rep</th><th>Elit%</th><th>Mut</th><th>Mut%</th><th>Xov</th><th>Xov%</th><th>Sel</th><th>Fitness</th>
     </tr></thead><tbody id="popBody"></tbody></table>
   </div>
   <div class="tour-panel">
@@ -402,7 +402,7 @@ async function startRun() {
       metaPop[i]._bestTour = res.bestTour;
       metaPop[i]._bestDist = res.bestDistance;
 
-      setStatus(`<span class="spinner"></span>Gen ${gen+1}/${numGens} — chromosome ${i+1}/${popSize} (fitness: ${metaPop[i].fitness.toFixed(1)}%)`);
+      setStatus(`<span class="spinner"></span>Gen ${gen+1}/${numGens} — chromosome ${i+1}/${popSize} (fitness: ${metaPop[i].fitness.toFixed(1)})`);
       await yieldToUI();
     }
 
@@ -445,7 +445,7 @@ async function startRun() {
   }
 
   if (generationData.length > 0) selectGen(generationData.length - 1);
-  setStatus(`Done. ${generationData.length} generations completed. Best fitness: ${generationData.length ? generationData[generationData.length-1].bestFitness.toFixed(2) : 0}%`);
+  setStatus(`Done. ${generationData.length} generations completed. Best fitness: ${generationData.length ? generationData[generationData.length-1].bestFitness.toFixed(2) : 0}`);
   running = false;
   document.getElementById('runBtn').disabled = false;
   document.getElementById('stopBtn').style.display = 'none';
@@ -522,7 +522,7 @@ function drawChart() {
     ctx.fillStyle = '#8890a4';
     ctx.font = '10px monospace';
     ctx.textAlign = 'right';
-    ctx.fillText((maxFit - (maxFit - minFit) * i / 4).toFixed(0) + '%', pad.l - 4, y + 3);
+    ctx.fillText((maxFit - (maxFit - minFit) * i / 4).toFixed(0), pad.l - 4, y + 3);
   }
   // X labels
   ctx.textAlign = 'center';
