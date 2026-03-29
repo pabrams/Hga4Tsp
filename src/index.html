@@ -25,66 +25,59 @@
     line-height: 1.5;
     min-height: 100vh;
   }
-  header {
+  .toolbar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
+    padding: 6px 16px;
     display: flex;
-    align-items: center;
-    gap: 16px;
+    gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
   }
-  header h1 {
-    font-size: 16px;
+  .toolbar h1 {
+    font-size: 14px;
     font-weight: 600;
     color: var(--accent);
     white-space: nowrap;
+    margin-right: 4px;
   }
-  header a {
+  .toolbar > a {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 11px;
     text-decoration: none;
+    margin-right: 8px;
   }
-  header a:hover { color: var(--accent); }
-  .controls {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: flex-end;
-  }
+  .toolbar > a:hover { color: var(--accent); }
   .control-group {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    gap: 4px;
   }
   .control-group label {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
   }
   .control-group input, .control-group select {
     background: var(--surface2);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 4px 8px;
+    padding: 2px 6px;
     border-radius: 4px;
     font-family: inherit;
-    font-size: 12px;
-    width: 80px;
+    font-size: 11px;
+    width: 64px;
   }
-  .control-group select { width: 120px; }
+  .control-group select { width: 100px; }
   button {
     background: var(--accent);
     color: #fff;
     border: none;
-    padding: 6px 16px;
+    padding: 4px 12px;
     border-radius: 4px;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     font-weight: 600;
     align-self: flex-end;
@@ -94,9 +87,9 @@
   #stopBtn { background: var(--accent2); display: none; }
   .main {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 1fr calc(100vh - 60px);
     grid-template-rows: auto 1fr;
-    height: calc(100vh - 105px);
+    height: calc(100vh - 60px);
     overflow: hidden;
   }
   @media (max-width: 900px) {
@@ -105,7 +98,7 @@
   .chart-panel {
     padding: 16px 24px;
     border-bottom: 1px solid var(--border);
-    grid-column: 1 / -1;
+    grid-column: 1 / 2;
     min-height: 200px;
     position: relative;
   }
@@ -142,7 +135,6 @@
   .legend .avg::before { background: var(--accent); }
   .table-panel {
     overflow-y: auto;
-    border-right: 1px solid var(--border);
   }
   .gen-tabs {
     display: flex;
@@ -204,6 +196,9 @@
     display: flex;
     flex-direction: column;
     padding: 12px;
+    grid-row: 1 / -1;
+    grid-column: 2;
+    border-left: 1px solid var(--border);
   }
   .tour-panel h2 {
     font-size: 11px;
@@ -224,6 +219,7 @@
     min-height: 200px;
     border-radius: 6px;
     background: var(--surface);
+    aspect-ratio: 1 / 1;
   }
   .status-bar {
     background: var(--surface);
@@ -252,12 +248,9 @@
 </head>
 <body>
 
-<header>
+<div class="toolbar">
   <h1>MetaGA4TSP</h1>
-  <a href="..">&larr; Back to report</a>
-</header>
-
-<div class="controls">
+  <a href="..">&larr; Report</a>
   <div class="control-group">
     <label>TSP Instance</label>
     <select id="tspSelect">
@@ -276,6 +269,7 @@
   <button id="runBtn" onclick="startRun()">Run</button>
   <button id="stopBtn" onclick="stopRun()">Stop</button>
 </div>
+
 
 <div class="main">
   <div class="chart-panel">
@@ -553,9 +547,9 @@ function drawTour(tour, dist) {
   const tsp = getTspInstance();
   const cities = tsp.cities;
   const canvas = document.getElementById('tourCanvas');
-  const rect = canvas.parentElement.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
-  const size = Math.min(rect.width - 24, 320);
+  const size = Math.min(rect.width, rect.height) || Math.min(rect.width - 24, 320);
   canvas.width = size * dpr;
   canvas.height = size * dpr;
   canvas.style.width = size + 'px';
