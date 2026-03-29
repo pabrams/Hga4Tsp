@@ -330,6 +330,29 @@ function generateDblCirc52() {
   return { name: 'dbl_circ_52', cities, knownOptimum: outer + inner - 20 };
 }
 
+// --- Settings persistence ---
+const SETTINGS_KEY = 'metaga4tsp-settings';
+const SETTING_IDS = ['tspSelect','popSize','numGens','maxTspGens','mutRate','xRate','elitism','seed'];
+
+function loadSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    if (!saved) return;
+    for (const id of SETTING_IDS) {
+      if (saved[id] != null) document.getElementById(id).value = saved[id];
+    }
+  } catch {}
+}
+
+function saveSettings() {
+  const settings = {};
+  for (const id of SETTING_IDS) settings[id] = document.getElementById(id).value;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+loadSettings();
+for (const id of SETTING_IDS) document.getElementById(id).addEventListener('change', saveSettings);
+
 // --- Meta-GA app state ---
 let running = false;
 let generationData = [];
