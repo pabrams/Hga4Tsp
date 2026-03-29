@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaGA4TSP — Interactive Demo</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242736;
+    --border: #2e3245;
+    --text: #e1e4ed;
+    --muted: #8890a4;
+    --accent: #6c8cff;
+    --accent2: #ff6c8c;
+    --green: #4ecb71;
+    --yellow: #f0c040;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  header a {
+    color: var(--muted);
+    font-size: 12px;
+    text-decoration: none;
+  }
+  header a:hover { color: var(--accent); }
+  .controls {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .control-group label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .control-group input, .control-group select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    width: 80px;
+  }
+  .control-group select { width: 120px; }
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    align-self: flex-end;
+  }
+  button:hover { filter: brightness(1.15); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  #stopBtn { background: var(--accent2); display: none; }
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    grid-template-rows: auto 1fr;
+    height: calc(100vh - 105px);
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+  }
+  .chart-panel {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    grid-column: 1 / -1;
+    min-height: 200px;
+    position: relative;
+  }
+  .chart-panel h2 {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  #fitnessChart {
+    width: 100%;
+    height: 170px;
+    display: block;
+  }
+  .legend {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .legend span::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 3px;
+    margin-right: 4px;
+    vertical-align: middle;
+    border-radius: 1px;
+  }
+  .legend .best::before { background: var(--green); }
+  .legend .avg::before { background: var(--accent); }
+  .table-panel {
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  .gen-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .gen-tab {
+    padding: 8px 14px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    background: none;
+    border-radius: 0;
+    font-weight: 400;
+  }
+  .gen-tab:hover { color: var(--text); background: var(--surface2); }
+  .gen-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+  .pop-table {
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+  }
+  .pop-table th {
+    position: sticky;
+    top: 33px;
+    background: var(--surface);
+    text-align: left;
+    padding: 6px 10px;
+    color: var(--muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pop-table td {
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .pop-table tr:first-child td { color: var(--green); font-weight: 600; }
+  .pop-table .rep { color: var(--yellow); }
+  .pop-table .mut { color: var(--accent2); }
+  .pop-table .xov { color: var(--accent); }
+  .pop-table .sel { color: var(--green); }
+  .pop-table .rate { color: var(--muted); }
+  .tour-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+  }
+  .tour-panel h2 {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .tour-info {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .tour-info strong { color: var(--text); }
+  #tourCanvas {
+    width: 100%;
+    flex: 1;
+    min-height: 200px;
+    border-radius: 6px;
+    background: var(--surface);
+  }
+  .status-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 6px 24px;
+    font-size: 11px;
+    color: var(--muted);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .spinner {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MetaGA4TSP</h1>
+  <a href="..">&larr; Back to report</a>
+</header>
+
+<div class="controls">
+  <div class="control-group">
+    <label>TSP Instance</label>
+    <select id="tspSelect">
+      <option value="circle16">circle16</option>
+      <option value="circle32" selected>circle32</option>
+      <option value="dbl_circ_52">dbl_circ_52</option>
+    </select>
+  </div>
+  <div class="control-group"><label>Pop Size</label><input id="popSize" type="number" value="12" min="4" max="50"></div>
+  <div class="control-group"><label>Meta Gens</label><input id="numGens" type="number" value="8" min="1" max="50"></div>
+  <div class="control-group"><label>TSP Gens</label><input id="maxTspGens" type="number" value="100" min="10" max="2000"></div>
+  <div class="control-group"><label>Mut Rate</label><input id="mutRate" type="number" value="0.35" min="0" max="1" step="0.05"></div>
+  <div class="control-group"><label>X Rate</label><input id="xRate" type="number" value="0.85" min="0" max="1" step="0.05"></div>
+  <div class="control-group"><label>Elitism</label><input id="elitism" type="number" value="0.1" min="0" max="1" step="0.05"></div>
+  <div class="control-group"><label>Seed</label><input id="seed" type="number" value="42"></div>
+  <button id="runBtn" onclick="startRun()">Run</button>
+  <button id="stopBtn" onclick="stopRun()">Stop</button>
+</div>
+
+<div class="main">
+  <div class="chart-panel">
+    <h2>Fitness by Meta-Generation</h2>
+    <div class="legend">
+      <span class="best">Best</span>
+      <span class="avg">Average</span>
+    </div>
+    <canvas id="fitnessChart"></canvas>
+  </div>
+  <div class="table-panel">
+    <div class="gen-tabs" id="genTabs"></div>
+    <table class="pop-table"><thead><tr>
+      <th>#</th><th>Rep</th><th>Elit%</th><th>Mut</th><th>Mut%</th><th>Xov</th><th>Xov%</th><th>Sel</th><th>Fit%</th>
+    </tr></thead><tbody id="popBody"></tbody></table>
+  </div>
+  <div class="tour-panel">
+    <h2>Best Tour Found</h2>
+    <div class="tour-info" id="tourInfo">Run the meta-GA to see results.</div>
+    <canvas id="tourCanvas"></canvas>
+  </div>
+</div>
+
+<div class="status-bar" id="statusBar">Ready. Configure parameters and click Run.</div>
+
+<script>
+// ============================================================
+// Inline MetaGA4TSP engine (ported from TypeScript src/)
+// ============================================================
+
+// --- Seeded RNG (Mulberry32) ---
+class SeededRng {
+  constructor(seed) { this.state = seed | 0; }
+  next() {
+    this.state = (this.state + 0x6d2b79f5) | 0;
+    let t = Math.imul(this.state ^ (this.state >>> 15), 1 | this.state);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  nextInt(min, max) { return min + Math.floor(this.next() * (max - min)); }
+  shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = this.nextInt(0, i + 1);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  chance(p) { return this.next() < p; }
+  pick(arr) { return arr[this.nextInt(0, arr.length)]; }
+}
+
+// --- TSP ---
+function cityDist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+function buildDistMatrix(cities) {
+  const n = cities.length;
+  const m = Array.from({length: n}, () => new Array(n));
+  for (let i = 0; i < n; i++) { m[i][i] = 0; for (let j = i+1; j < n; j++) { m[i][j] = m[j][i] = cityDist(cities[i], cities[j]); } }
+  return m;
+}
+function tourDist(tour, dm) {
+  let d = 0;
+  for (let i = 0; i < tour.length - 1; i++) d += dm[tour[i]][tour[i+1]];
+  d += dm[tour[tour.length-1]][tour[0]];
+  return d;
+}
+function isValidTour(tour, n) {
+  if (tour.length !== n) return false;
+  const s = new Set(tour);
+  if (s.size !== n) return false;
+  for (const c of tour) if (c < 0 || c >= n) return false;
+  return true;
+}
+function generateCircle(n, r = 100) {
+  const cities = [];
+  for (let i = 0; i < n; i++) { const a = 2*Math.PI*i/n; cities.push({x: r*Math.cos(a), y: r*Math.sin(a)}); }
+  return { name: `circle${n}`, cities, knownOptimum: n * 2 * r * Math.sin(Math.PI / n) };
+}
+function generateDblCirc52() {
+  const cities = [];
+  for (let i = 0; i < 32; i++) { const a = 2*Math.PI*i/32; cities.push({x: 100*Math.cos(a), y: 100*Math.sin(a)}); }
+  for (let i = 0; i < 20; i++) { const a = 2*Math.PI*i/20; cities.push({x: 50*Math.cos(a), y: 50*Math.sin(a)}); }
+  // Approximate optimum (outer ring + inner ring + 2 connections)
+  const outer = 32 * 2 * 100 * Math.sin(Math.PI/32);
+  const inner = 20 * 2 * 50 * Math.sin(Math.PI/20);
+  return { name: 'dbl_circ_52', cities, knownOptimum: outer + inner - 20 };
+}
+
+// --- Mutation ---
+function exchangeMut(tour, rng) {
+  const r = [...tour], n = r.length;
+  const i = rng.nextInt(0,n); let j = rng.nextInt(0,n-1); if(j>=i)j++;
+  [r[i],r[j]]=[r[j],r[i]]; return r;
+}
+function insertionMut(tour, rng) {
+  const r=[...tour],n=r.length,fi=rng.nextInt(0,n);let ti=rng.nextInt(0,n-1);if(ti>=fi)ti++;
+  const c=r.splice(fi,1)[0];r.splice(ti,0,c);return r;
+}
+function simpleInvMut(tour, rng) {
+  const n=tour.length;if(n<3)return[...tour];const r=[...tour];
+  let i=rng.nextInt(0,n-2),j=rng.nextInt(i+3,n+1);if(j>n)j=n;if(j-i<3){i=0;j=Math.min(3,n);}
+  const s=r.slice(i,j).reverse();for(let k=0;k<s.length;k++)r[i+k]=s[k];return r;
+}
+function displaceMut(tour, rng) {
+  const n=tour.length;if(n<4)return[...tour];
+  const len=rng.nextInt(3,n),st=rng.nextInt(0,n-len+1),r=[...tour],sub=r.splice(st,len),ip=rng.nextInt(0,r.length+1);
+  r.splice(ip,0,...sub);return r;
+}
+function inversionMut(tour, rng) {
+  const n=tour.length;if(n<4)return[...tour];
+  const len=rng.nextInt(3,n),st=rng.nextInt(0,n-len+1),r=[...tour],sub=r.splice(st,len).reverse(),ip=rng.nextInt(0,r.length+1);
+  r.splice(ip,0,...sub);return r;
+}
+const MUTATIONS = [exchangeMut, insertionMut, simpleInvMut, displaceMut, inversionMut];
+const MUT_LABELS = ['EM','ISM','SIM','DM','IVM'];
+
+// --- Crossover ---
+function pmxX(p1, p2, rng) {
+  const n=p1.length,child=new Array(n).fill(-1),cp1=rng.nextInt(0,n-1),cp2=rng.nextInt(cp1+1,n);
+  const inC=new Set();
+  for(let i=cp1;i<=cp2;i++){child[i]=p1[i];inC.add(p1[i]);}
+  const map=new Map();for(let i=cp1;i<=cp2;i++)map.set(p1[i],p2[i]);
+  for(let i=0;i<n;i++){if(child[i]!==-1)continue;let v=p2[i];while(inC.has(v))v=map.get(v);child[i]=v;inC.add(v);}
+  return child;
+}
+function cxX(p1, p2, rng) {
+  const n=p1.length,child=new Array(n).fill(-1),vis=new Array(n).fill(false);
+  const posP2=new Map();for(let i=0;i<n;i++)posP2.set(p2[i],i);
+  let useP1=rng.chance(0.5),cs=0;
+  while(cs<n){while(cs<n&&vis[cs])cs++;if(cs>=n)break;
+    const cyc=[];let pos=cs;
+    do{cyc.push(pos);vis[pos]=true;const v=p2[pos];pos=p1.indexOf(v);}while(pos!==cs);
+    for(const p of cyc)child[p]=useP1?p1[p]:p2[p];useP1=!useP1;}
+  return child;
+}
+function oxX(p1, p2, rng) {
+  const n=p1.length,child=new Array(n).fill(-1),len=rng.nextInt(3,n),st=rng.nextInt(0,n-len+1),end=st+len;
+  const inC=new Set();for(let i=st;i<end;i++){child[i]=p1[i];inC.add(p1[i]);}
+  let fp=(end%n),pp=(end%n),filled=0,toFill=n-len;
+  while(filled<toFill){const c=p2[pp];if(!inC.has(c)){child[fp]=c;inC.add(c);fp=(fp+1)%n;filled++;}pp=(pp+1)%n;}
+  return child;
+}
+function erxX(p1, p2, rng) {
+  const n=p1.length,el=new Map();
+  for(let i=0;i<n;i++)el.set(i,new Set());
+  function addE(p){for(let i=0;i<n;i++){const a=p[i],b=p[(i+1)%n];el.get(a).add(b);el.get(b).add(a);}}
+  addE(p1);addE(p2);
+  const child=[],used=new Set();
+  let cur=-1,minE=Infinity;for(const[c,e]of el)if(e.size<minE){minE=e.size;cur=c;}
+  child.push(cur);used.add(cur);for(const e of el.values())e.delete(cur);
+  while(child.length<n){const nb=el.get(cur);let next=-1;
+    if(nb.size>0){let ms=Infinity;for(const ne of nb)if(!used.has(ne)){const sz=el.get(ne).size;if(sz<ms){ms=sz;next=ne;}}}
+    if(next===-1){let ms=Infinity;for(let i=0;i<n;i++)if(!used.has(i)){const sz=el.get(i).size;if(sz<ms){ms=sz;next=i;}}}
+    child.push(next);used.add(next);cur=next;for(const e of el.values())e.delete(cur);}
+  return child;
+}
+function mpxX(p1, p2, rng) {
+  const n=p1.length,child=new Array(n).fill(-1),len=rng.nextInt(3,n),st=rng.nextInt(0,n-len+1);
+  const inC=new Set();for(let i=0;i<len;i++){child[i]=p1[st+i];inC.add(p1[st+i]);}
+  let fp=len;for(let i=0;i<n;i++){const c=p2[i];if(!inC.has(c)){child[fp++]=c;}}
+  return child;
+}
+const CROSSOVERS = [pmxX, cxX, oxX, erxX, mpxX];
+const XOV_LABELS = ['PMX','CX','OX','ERX','MPX'];
+
+// --- Selection ---
+function rankSel(pop, rng, excl) {
+  const p=0.2, sorted=[...pop].filter(i=>i!==excl).sort((a,b)=>b.fitness-a.fitness);
+  while(true){for(const ind of sorted)if(rng.chance(p))return ind;}
+}
+function rwsSel(pop, rng, excl) {
+  const cands=excl?pop.filter(i=>i!==excl):pop;
+  const total=cands.reduce((s,i)=>s+i.fitness,0);if(total<=0)return rng.pick(cands);
+  const spin=rng.next()*total;let cum=0;
+  for(const i of cands){cum+=i.fitness;if(cum>=spin)return i;}return cands[cands.length-1];
+}
+function t5Sel(pop, rng, excl) {
+  const cands=excl?pop.filter(i=>i!==excl):pop;
+  let best=rng.pick(cands);for(let i=1;i<Math.min(5,cands.length);i++){const c=rng.pick(cands);if(c.fitness>best.fitness)best=c;}return best;
+}
+function uniformSel(pop, rng, excl) { const c=excl?pop.filter(i=>i!==excl):pop;return rng.pick(c); }
+const SELECTIONS = [uniformSel, rankSel, rwsSel, t5Sel];
+const SEL_LABELS = ['S','RS','RWS','T5S'];
+const REP_LABELS = ['S1R','S2R','H1R'];
+
+// --- TSP GA core ---
+function makeTspInd(tour, dm) { const d=tourDist(tour,dm); return {tour, distance:d, fitness:1/d}; }
+function randomTour(n, rng) { const t=Array.from({length:n},(_,i)=>i);rng.shuffle(t);return t; }
+
+function genNextPop(pop, mc, dm, rng) {
+  const n=pop.length, sorted=[...pop].sort((a,b)=>b.fitness-a.fitness);
+  const ec=Math.max(1,Math.round((mc.elitismRate/100)*n));
+  const newP=sorted.slice(0,Math.min(ec,n));
+  const xr=mc.crossoverRate/100, mr=mc.mutationRate/100;
+  const selFn=SELECTIONS[mc.selectionMethod], mutFn=MUTATIONS[mc.mutationType], xovFn=CROSSOVERS[mc.crossoverType];
+  let idx=newP.length;
+
+  if (mc.replacement === 1) { // S2R
+    while(newP.length<n){
+      if(rng.chance(xr)){
+        const p1=selFn(pop,rng),p2=selFn(pop,rng,p1);
+        let c1=makeTspInd(xovFn(p1.tour,p2.tour,rng),dm);
+        let c2=makeTspInd(xovFn(p2.tour,p1.tour,rng),dm);
+        if(rng.chance(mr))c1=makeTspInd(mutFn(c1.tour,rng),dm);
+        if(rng.chance(mr))c2=makeTspInd(mutFn(c2.tour,rng),dm);
+        newP.push(c1);if(newP.length<n)newP.push(c2);
+      } else {
+        let ch=pop[idx%pop.length];
+        if(rng.chance(mr))ch=makeTspInd(mutFn(ch.tour,rng),dm);
+        newP.push(ch);
+      }
+      idx++;
+    }
+  } else { // S1R (0) or H1R (2)
+    while(newP.length<n){
+      let child;
+      if(rng.chance(xr)){
+        const p1=selFn(pop,rng),p2=selFn(pop,rng,p1);
+        const ct=rng.chance(0.5)?xovFn(p1.tour,p2.tour,rng):xovFn(p2.tour,p1.tour,rng);
+        child=makeTspInd(ct,dm);
+        if(mc.replacement===2){ // H1R
+          if(p1.fitness>child.fitness&&p1.fitness>p2.fitness)child=p1;
+          else if(p2.fitness>child.fitness)child=p2;
+        }
+      } else { child=pop[idx%pop.length]; }
+      if(rng.chance(mr))child=makeTspInd(mutFn(child.tour,rng),dm);
+      newP.push(child);idx++;
+    }
+  }
+  return newP.slice(0,n);
+}
+
+function runTspGa(instance, mc, maxGens, rng) {
+  const nc=instance.cities.length, ps=2*nc, dm=buildDistMatrix(instance.cities);
+  let pop=[];
+  const seen=new Set();
+  for(let i=0;i<ps*100&&pop.length<ps;i++){
+    const t=randomTour(nc,rng),ind=makeTspInd(t,dm);
+    if(!seen.has(ind.distance)){seen.add(ind.distance);pop.push(ind);}
+  }
+  while(pop.length<ps)pop.push(makeTspInd(randomTour(nc,rng),dm));
+  let best=pop.reduce((b,i)=>i.fitness>b.fitness?i:b);
+  let gensRun=0;
+  for(let g=0;g<maxGens;g++){
+    if(best.distance<=instance.knownOptimum){gensRun=g;break;}
+    pop=genNextPop(pop,mc,dm,rng);
+    const cb=pop.reduce((b,i)=>i.fitness>b.fitness?i:b);
+    if(cb.fitness>best.fitness)best=cb;
+    gensRun=g+1;
+  }
+  return {bestDistance:best.distance, bestTour:best.tour, generationsRun:gensRun};
+}
+
+// --- Meta-chromosome ---
+const GENE_COUNTS=[3,101,5,101,5,101,4];
+function randMeta(rng){return{replacement:rng.nextInt(0,3),elitismRate:rng.nextInt(0,101),mutationType:rng.nextInt(0,5),mutationRate:rng.nextInt(0,101),crossoverType:rng.nextInt(0,5),crossoverRate:rng.nextInt(0,101),selectionMethod:rng.nextInt(0,4)};}
+function metaArr(mc){return[mc.replacement,mc.elitismRate,mc.mutationType,mc.mutationRate,mc.crossoverType,mc.crossoverRate,mc.selectionMethod];}
+function arrMeta(g){return{replacement:g[0],elitismRate:g[1],mutationType:g[2],mutationRate:g[3],crossoverType:g[4],crossoverRate:g[5],selectionMethod:g[6]};}
+function metaXover(p1,p2,rng){const g1=metaArr(p1),g2=metaArr(p2),cp=rng.nextInt(1,7),c1=[...g1.slice(0,cp),...g2.slice(cp)],c2=[...g2.slice(0,cp),...g1.slice(cp)];return arrMeta(rng.chance(0.5)?c1:c2);}
+function metaMut(mc,rng){const g=metaArr(mc),i=rng.nextInt(0,7);g[i]=rng.nextInt(0,GENE_COUNTS[i]);return arrMeta(g);}
+function metaFit(dist,opt,gens,maxG){if(dist<=opt)return 110-(gens/maxG)*10;return(opt/dist)*100;}
+
+// --- Meta-GA ---
+let running = false;
+let generationData = []; // {population, avgFitness, bestFitness, bestTour, bestDist}
+let selectedGen = 0;
+
+function getTspInstance() {
+  const v = document.getElementById('tspSelect').value;
+  if (v === 'circle16') return generateCircle(16);
+  if (v === 'circle32') return generateCircle(32);
+  if (v === 'dbl_circ_52') return generateDblCirc52();
+  return generateCircle(32);
+}
+
+async function startRun() {
+  if (running) return;
+  running = true;
+  generationData = [];
+  selectedGen = 0;
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('stopBtn').style.display = '';
+  document.getElementById('genTabs').innerHTML = '';
+  document.getElementById('popBody').innerHTML = '';
+
+  const tsp = getTspInstance();
+  const popSize = +document.getElementById('popSize').value;
+  const numGens = +document.getElementById('numGens').value;
+  const maxTspGens = +document.getElementById('maxTspGens').value;
+  const mutRate = +document.getElementById('mutRate').value;
+  const xRate = +document.getElementById('xRate').value;
+  const elitismPct = +document.getElementById('elitism').value;
+  const seed = +document.getElementById('seed').value;
+  const rng = new SeededRng(seed);
+
+  let metaPop = [];
+  for (let i = 0; i < popSize; i++) metaPop.push({chromosome: randMeta(rng), fitness: 0});
+
+  for (let gen = 0; gen < numGens; gen++) {
+    if (!running) break;
+    setStatus(`<span class="spinner"></span>Generation ${gen+1}/${numGens} — evaluating ${popSize} chromosomes...`);
+
+    // Evaluate each chromosome (yield to UI between each)
+    for (let i = 0; i < metaPop.length; i++) {
+      if (!running) break;
+      const tspSeed = rng.nextInt(0, 2147483647);
+      const tspRng = new SeededRng(tspSeed);
+      const res = runTspGa(tsp, metaPop[i].chromosome, maxTspGens, tspRng);
+      metaPop[i].fitness = metaFit(res.bestDistance, tsp.knownOptimum, res.generationsRun, maxTspGens);
+      metaPop[i]._bestTour = res.bestTour;
+      metaPop[i]._bestDist = res.bestDistance;
+
+      setStatus(`<span class="spinner"></span>Gen ${gen+1}/${numGens} — chromosome ${i+1}/${popSize} (fitness: ${metaPop[i].fitness.toFixed(1)}%)`);
+      await yieldToUI();
+    }
+
+    // Record generation data
+    const sorted = [...metaPop].sort((a,b) => b.fitness - a.fitness);
+    const avg = sorted.reduce((s,i) => s+i.fitness, 0) / sorted.length;
+    const best = sorted[0];
+    generationData.push({
+      population: sorted.map(i => ({chromosome: {...i.chromosome}, fitness: i.fitness, _bestTour: i._bestTour, _bestDist: i._bestDist})),
+      avgFitness: avg,
+      bestFitness: best.fitness,
+      bestTour: best._bestTour,
+      bestDist: best._bestDist,
+    });
+
+    addGenTab(gen);
+    if (gen === 0 || gen === generationData.length - 1) selectGen(gen);
+    drawChart();
+
+    if (gen < numGens - 1) {
+      // Next generation
+      const eliteCount = Math.max(1, Math.round(elitismPct * popSize));
+      const newPop = [];
+      for (let i = 0; i < Math.min(eliteCount, popSize); i++)
+        newPop.push({chromosome: {...sorted[i].chromosome}, fitness: 0});
+      let idx = newPop.length;
+      while (newPop.length < popSize) {
+        let child;
+        if (rng.chance(xRate)) {
+          const p1 = metaRankSel(metaPop, rng);
+          const p2 = metaRankSel(metaPop, rng, p1);
+          child = {chromosome: metaXover(p1.chromosome, p2.chromosome, rng), fitness: 0};
+        } else {
+          child = {chromosome: {...sorted[idx % sorted.length].chromosome}, fitness: 0};
+        }
+        if (rng.chance(mutRate)) child = {chromosome: metaMut(child.chromosome, rng), fitness: 0};
+        newPop.push(child);
+        idx++;
+      }
+      metaPop = newPop;
+    }
+  }
+
+  if (generationData.length > 0) selectGen(generationData.length - 1);
+  setStatus(`Done. ${generationData.length} generations completed. Best fitness: ${generationData.length ? generationData[generationData.length-1].bestFitness.toFixed(2) : 0}%`);
+  running = false;
+  document.getElementById('runBtn').disabled = false;
+  document.getElementById('stopBtn').style.display = 'none';
+}
+
+function metaRankSel(pop, rng, excl) {
+  const p=0.2, sorted=[...pop].filter(i=>i!==excl).sort((a,b)=>b.fitness-a.fitness);
+  while(true){for(const ind of sorted)if(rng.chance(p))return ind;}
+}
+
+function stopRun() { running = false; }
+function yieldToUI() { return new Promise(r => setTimeout(r, 0)); }
+function setStatus(html) { document.getElementById('statusBar').innerHTML = html; }
+
+// --- UI ---
+function addGenTab(gen) {
+  const tabs = document.getElementById('genTabs');
+  const btn = document.createElement('button');
+  btn.className = 'gen-tab';
+  btn.textContent = `Gen ${gen}`;
+  btn.onclick = () => selectGen(gen);
+  btn.id = `tab-${gen}`;
+  tabs.appendChild(btn);
+}
+
+function selectGen(gen) {
+  selectedGen = gen;
+  document.querySelectorAll('.gen-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(`tab-${gen}`);
+  if (tab) { tab.classList.add('active'); tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'}); }
+
+  const data = generationData[gen];
+  if (!data) return;
+  const body = document.getElementById('popBody');
+  body.innerHTML = data.population.map((ind, i) => {
+    const mc = ind.chromosome;
+    return `<tr>
+      <td>${i+1}</td>
+      <td class="rep">${REP_LABELS[mc.replacement]}</td>
+      <td class="rate">${mc.elitismRate}%</td>
+      <td class="mut">${MUT_LABELS[mc.mutationType]}</td>
+      <td class="rate">${mc.mutationRate}%</td>
+      <td class="xov">${XOV_LABELS[mc.crossoverType]}</td>
+      <td class="rate">${mc.crossoverRate}%</td>
+      <td class="sel">${SEL_LABELS[mc.selectionMethod]}</td>
+      <td>${ind.fitness.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+
+  drawTour(data.bestTour, data.bestDist);
+}
+
+// --- Chart ---
+function drawChart() {
+  const canvas = document.getElementById('fitnessChart');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = (rect.width - 48) * dpr;
+  canvas.height = 170 * dpr;
+  canvas.style.width = (rect.width - 48) + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width - 48, H = 170;
+  ctx.clearRect(0, 0, W, H);
+
+  if (generationData.length === 0) return;
+
+  const pad = {l: 40, r: 10, t: 10, b: 25};
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  const maxFit = Math.max(110, ...generationData.map(d => d.bestFitness)) * 1.05;
+  const minFit = Math.max(0, Math.min(...generationData.map(d => d.avgFitness)) - 5);
+
+  // Grid
+  ctx.strokeStyle = '#2e3245';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + ph * i / 4;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + pw, y); ctx.stroke();
+    ctx.fillStyle = '#8890a4';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText((maxFit - (maxFit - minFit) * i / 4).toFixed(0) + '%', pad.l - 4, y + 3);
+  }
+  // X labels
+  ctx.textAlign = 'center';
+  const step = Math.max(1, Math.floor(generationData.length / 10));
+  for (let i = 0; i < generationData.length; i += step) {
+    const x = pad.l + (pw * i) / Math.max(1, generationData.length - 1);
+    ctx.fillText(i.toString(), x, H - 4);
+  }
+
+  function plotLine(data, color, width) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    for (let i = 0; i < data.length; i++) {
+      const x = pad.l + (pw * i) / Math.max(1, data.length - 1);
+      const y = pad.t + ph * (1 - (data[i] - minFit) / (maxFit - minFit));
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // Dots
+    ctx.fillStyle = color;
+    for (let i = 0; i < data.length; i++) {
+      const x = pad.l + (pw * i) / Math.max(1, data.length - 1);
+      const y = pad.t + ph * (1 - (data[i] - minFit) / (maxFit - minFit));
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  plotLine(generationData.map(d => d.avgFitness), '#6c8cff', 1.5);
+  plotLine(generationData.map(d => d.bestFitness), '#4ecb71', 2);
+
+  // Highlight selected generation
+  if (selectedGen < generationData.length) {
+    const x = pad.l + (pw * selectedGen) / Math.max(1, generationData.length - 1);
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ph); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+// --- Tour canvas ---
+function drawTour(tour, dist) {
+  const tsp = getTspInstance();
+  const cities = tsp.cities;
+  const canvas = document.getElementById('tourCanvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const size = Math.min(rect.width - 24, 320);
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, size, size);
+
+  if (!tour || !cities.length) return;
+
+  // Bounds
+  let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+  for (const c of cities) { minX=Math.min(minX,c.x);maxX=Math.max(maxX,c.x);minY=Math.min(minY,c.y);maxY=Math.max(maxY,c.y); }
+  const pad = 20;
+  const sx = (size - 2*pad) / (maxX - minX || 1);
+  const sy = (size - 2*pad) / (maxY - minY || 1);
+  const s = Math.min(sx, sy);
+  const ox = pad + ((size - 2*pad) - (maxX - minX) * s) / 2;
+  const oy = pad + ((size - 2*pad) - (maxY - minY) * s) / 2;
+  const tx = c => ox + (c.x - minX) * s;
+  const ty = c => oy + (maxY - c.y) * s; // flip y
+
+  // Draw edges
+  ctx.strokeStyle = 'rgba(108, 140, 255, 0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = 0; i < tour.length; i++) {
+    const c = cities[tour[i]];
+    if (i === 0) ctx.moveTo(tx(c), ty(c)); else ctx.lineTo(tx(c), ty(c));
+  }
+  ctx.lineTo(tx(cities[tour[0]]), ty(cities[tour[0]]));
+  ctx.stroke();
+
+  // Draw cities
+  for (let i = 0; i < cities.length; i++) {
+    const c = cities[i];
+    ctx.fillStyle = tour[0] === i ? '#4ecb71' : '#ff6c8c';
+    ctx.beginPath(); ctx.arc(tx(c), ty(c), 3, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Info
+  const pctOpt = (tsp.knownOptimum / dist * 100).toFixed(1);
+  document.getElementById('tourInfo').innerHTML =
+    `Distance: <strong>${dist.toFixed(2)}</strong> | Optimum: <strong>${tsp.knownOptimum.toFixed(2)}</strong> | <strong>${pctOpt}%</strong> of optimal`;
+}
+
+// Handle resize
+window.addEventListener('resize', () => {
+  drawChart();
+  if (generationData[selectedGen]) drawTour(generationData[selectedGen].bestTour, generationData[selectedGen].bestDist);
+});
+</script>
+</body>
+</html>
