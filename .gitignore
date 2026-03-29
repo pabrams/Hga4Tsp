@@ -3,3 +3,4 @@ dist/
 *.js.map
 .vitest/
 coverage/
+src/metaga4tsp.js

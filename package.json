@@ -4,7 +4,7 @@
   "description": "A Hierarchical Genetic Algorithm for the Travelling Salesman Problem",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && esbuild src/browser.ts --bundle --outfile=src/metaga4tsp.js --format=iife --minify",
     "test": "vitest run",
     "test:watch": "vitest",
     "start": "npx tsx src/main.ts"
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/pabrams/hga4tsp#readme",
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "esbuild": "^0.27.4",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vitest": "^4.1.2"

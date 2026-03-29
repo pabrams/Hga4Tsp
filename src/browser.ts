@@ -1,0 +1,100 @@
+// Browser entry point: exposes the GA engine on window.MetaGA4TSP
+import { SeededRng } from './rng.js';
+import {
+  MutationType,
+  CrossoverType,
+  SelectionMethod,
+  ReplacementScheme,
+  MetaChromosome,
+  MetaIndividual,
+  TspInstance,
+  City,
+  formatMetaChromosome,
+  MUTATION_LABELS,
+  CROSSOVER_LABELS,
+  SELECTION_LABELS,
+  REPLACEMENT_LABELS,
+} from './types.js';
+import {
+  buildDistanceMatrix,
+  tourDistanceMatrix,
+  isValidTour,
+  generateCircleTsp,
+} from './tsp.js';
+import {
+  exchangeMutation,
+  insertionMutation,
+  simpleInversionMutation,
+  displacementMutation,
+  inversionMutation,
+  applyMutation,
+} from './mutation.js';
+import {
+  pmxCrossover,
+  cxCrossover,
+  oxCrossover,
+  erxCrossover,
+  mpxCrossover,
+  applyCrossover,
+} from './crossover.js';
+import {
+  selectParent,
+  selectTwoParents,
+} from './selection.js';
+import { generateNextGeneration } from './replacement.js';
+import { randomTour, makeTspIndividual, generateInitialPopulation, runTspGa, getBest } from './tsp-ga.js';
+import {
+  randomMetaChromosome,
+  metaToArray,
+  arrayToMeta,
+  metaCrossover,
+  metaMutation,
+  metaFitness,
+  makeMetaIndividual,
+  metaRankSelection,
+} from './meta-chromosome.js';
+
+(window as any).MetaGA4TSP = {
+  SeededRng,
+  MutationType,
+  CrossoverType,
+  SelectionMethod,
+  ReplacementScheme,
+  MUTATION_LABELS,
+  CROSSOVER_LABELS,
+  SELECTION_LABELS,
+  REPLACEMENT_LABELS,
+  formatMetaChromosome,
+  buildDistanceMatrix,
+  tourDistanceMatrix,
+  isValidTour,
+  generateCircleTsp,
+  exchangeMutation,
+  insertionMutation,
+  simpleInversionMutation,
+  displacementMutation,
+  inversionMutation,
+  applyMutation,
+  pmxCrossover,
+  cxCrossover,
+  oxCrossover,
+  erxCrossover,
+  mpxCrossover,
+  applyCrossover,
+  selectParent,
+  selectTwoParents,
+  generateNextGeneration,
+  randomTour,
+  makeTspIndividual,
+  generateInitialPopulation,
+  runTspGa,
+  getBest,
+  randomMetaChromosome,
+  metaToArray,
+  arrayToMeta,
+  metaCrossover,
+  metaMutation,
+  metaFitness,
+  makeMetaIndividual,
+  metaRankSelection,
+};
