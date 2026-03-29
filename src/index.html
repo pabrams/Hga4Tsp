@@ -351,7 +351,10 @@ function saveSettings() {
 }
 
 loadSettings();
-for (const id of SETTING_IDS) document.getElementById(id).addEventListener('change', saveSettings);
+for (const id of SETTING_IDS) {
+  document.getElementById(id).addEventListener('input', saveSettings);
+  document.getElementById(id).addEventListener('change', saveSettings);
+}
 
 // --- Meta-GA app state ---
 let running = false;
